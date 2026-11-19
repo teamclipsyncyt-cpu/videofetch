@@ -1,62 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VideoFetch - Video Downloader</title>
 
-function checkVideo() {
-  const input = document.getElementById("videoUrl");
-  const message = document.getElementById("message");
-  const urlText = input.value.trim();
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  if (!urlText) {
-    message.textContent = "Please paste a video link.";
-    return;
-  }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #101827, #263b59);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-  let url;
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      color: #172033;
+      padding: 35px 25px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
 
-  try {
-    url = new URL(urlText);
-  } catch {
-    message.textContent = "Please enter a valid URL.";
-    return;
-  }
+    .logo {
+      font-size: 34px;
+      font-weight: bold;
+      color: #2563eb;
+      margin-bottom: 10px;
+    }
 
-  if (!["https:", "http:"].includes(url.protocol)) {
-    message.textContent = "Invalid video link.";
-    return;
-  }
+    h1 {
+      font-size: 25px;
+      margin-bottom: 10px;
+    }
 
-  const host = url.hostname.toLowerCase();
+    .description {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 14px;
+    }
 
-  // Platform links: open the original platform
-  if (
-    host.includes("youtube.com") ||
-    host === "youtu.be" ||
-    host.includes("instagram.com")
-  ) {
-    message.textContent =
-      "This platform does not allow unauthorized downloads. Open the original video to use its authorized download options.";
+    input {
+      width: 100%;
+      padding: 15px;
+      margin-top: 22px;
+      border: 2px solid #dbe3ef;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
 
-    window.open(url.href, "_blank", "noopener");
-    return;
-  }
+    input:focus {
+      border-color: #2563eb;
+    }
 
-  // Direct video file links only
-  const allowed = /\.(mp4|webm|mov|m4v)$/i.test(url.pathname);
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-  if (!allowed) {
-    message.textContent =
-      "Unsupported link. Please use a direct MP4, WebM or MOV video link.";
-    return;
-  }
+    button:hover {
+      background: #1d4ed8;
+    }
 
-  const link = document.createElement("a");
-  link.href = url.href;
-  link.download = "VideoFetch-video";
-  link.target = "_blank";
-  link.rel = "noopener";
+    #message {
+      margin-top: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
 
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
+    .info {
+      margin-top: 25px;
+      padding: 15px;
+      background: #eff6ff;
+      border-radius: 10px;
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.6;
+    }
 
-  message.textContent =
-    "Download requested. Your browser may open or save the video depending on the source server.";
-}
+    footer {
+      margin-top: 25px;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">VideoFetch</div>
+
+    <h1>Download Your Videos</h1>
+
+    <p class="description">
+      Paste a direct video link and check whether it can be downloaded.
+    </p>
+
+    <input
+      type="url"
+      id="videoUrl"
+      placeholder="Paste your video link here..."
+    >
+
+    <button onclick="checkVideo()">
+      Check Video
+    </button>
+
+    <div id="message" role="status" aria-live="polite"></div>
+
+    <div class="info">
+      Supported direct video formats: MP4, WebM, MOV and M4V.
+      <br><br>
+      YouTube and Instagram links open on their original platforms.
+      Only download videos you own or have permission to download.
+    </div>
+
+    <footer>
+      © 2026 VideoFetch. All Rights Reserved.
+    </footer>
+
+  </div>
+
+  <script>
+    function checkVideo() {
+
+      const input = document.getElementById("videoUrl");
+      const message = document.getElementById("message");
+
+      const urlText = input.value.trim();
+
+      message.textContent = "";
+
+      if (!urlText) {
+        message.textContent = "Please paste a video link.";
+        return;
+      }
+
+      let url;
+
+      try {
+        url = new URL(urlText);
+      } catch (error) {
+        message.textContent = "Please enter a valid video URL.";
+        return;
+      }
+
+      if (url.protocol !== "https:" && url.protocol !== "http:") {
+        message.textContent = "Invalid video link.";
+        return;
+      }
+
+      const host = url.hostname.toLowerCase();
+
+      const isYouTube =
+        host === "youtube.com" ||
+        host.endsWith(".youtube.com") ||
+        host === "youtu.be";
+
+      const isInstagram =
+        host === "instagram.com" ||
+        host.endsWith(".instagram.com");
+
+      if (isYouTube || isInstagram) {
+
+        message.textContent =
+          "Opening the original platform. Use its available authorized download options.";
+
+        window.open(url.href, "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      const allowed =
+        /\.(mp4|webm|mov|m4v)$/i.test(url.pathname);
+
+      if (!allowed) {
+        message.textContent =
+          "Unsupported link. Please use a direct MP4, WebM, MOV or M4V video link.";
+        return;
+      }
+
+      const link = document.createElement("a");
+
+      link.href = url.href;
+      link.download = "VideoFetch-video";
+      link.target = "_blank";
+      link.rel = "noopener";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      message.textContent =
+        "Download requested! Your browser may download or open the video depending on the source server.";
+    }
+  </script>
+
+</body>
+</html>
