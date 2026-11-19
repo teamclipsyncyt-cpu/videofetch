@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VideoFetch - Video Tools</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: white;
+    }
+    header {
+      padding: 22px;
+      font-size: 25px;
+      font-weight: bold;
+      color: #ff4545;
+    }
+    main {
+      max-width: 600px;
+      margin: 70px auto;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 { font-size: 38px; }
+    p { color: #b9c2d0; }
+    .panel {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      margin-top: 30px;
+    }
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      background: #e53935;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    #message { color: #333; }
+    footer {
+      text-align: center;
+      color: #9ba6b5;
+      padding: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>▶ VideoFetch</header>
+
+  <main>
+    <h1>Your Videos, Your Way.</h1>
+    <p>Simple and easy video tools.</p>
+
+    <div class="panel">
+      <input id="videoUrl"
+        type="url"
+        placeholder="Paste your video URL here">
+
+      <button onclick="checkVideo()">
+        Check Video
+      </button>
+
+      <p id="message">
+        Only videos you own or are authorized to download.
+      </p>
+    </div>
+  </main>
+
+  <footer>VideoFetch © 2026</footer>
+
+  <script>
+    function checkVideo() {
+      const url = document.getElementById("videoUrl").value.trim();
+      const message = document.getElementById("message");
+
+      if (!url) {
+        message.textContent = "Please enter a video URL.";
+        return;
+      }
+
+      message.textContent =
+        "Link received. Download permission must be verified through an authorized source.";
+    }
+  </script>
+</body>
+</html>
