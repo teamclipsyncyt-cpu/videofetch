@@ -8,104 +8,173 @@
 <style>
 *{box-sizing:border-box}
 
+:root{
+ --bg:#080808;
+ --card:#151515;
+ --text:#ffffff;
+ --muted:#aaaaaa;
+ --border:#333333;
+ --input:#202020;
+ --soft:#242424;
+ --button:#ffffff;
+ --button-text:#111111;
+ --shadow:#0008;
+}
+
+body[data-theme="light"]{
+ --bg:#eeeeee;
+ --card:#ffffff;
+ --text:#111111;
+ --muted:#666666;
+ --border:#dddddd;
+ --input:#f7f7f7;
+ --soft:#f0f0f0;
+ --button:#111111;
+ --button-text:#ffffff;
+ --shadow:#0002;
+}
+
 body{
  margin:0;
  min-height:100vh;
  padding:20px;
  font-family:Arial,sans-serif;
- color:white;
- background:linear-gradient(135deg,#080f20,#172e52);
+ color:var(--text);
+ background:var(--bg);
  display:flex;
  align-items:center;
- justify-content:center
+ justify-content:center;
+ transition:background .25s,color .25s;
 }
 
 .container{
  width:100%;
  max-width:600px;
- background:#fff;
- color:#172033;
+ background:var(--card);
+ color:var(--text);
+ border:1px solid var(--border);
  border-radius:22px;
- padding:30px 24px;
- box-shadow:0 20px 60px #0005;
- text-align:center
+ padding:25px 24px;
+ box-shadow:0 20px 60px var(--shadow);
+ text-align:center;
+ transition:background .25s,color .25s;
+}
+
+.topbar{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
 }
 
 .logo{
- font-size:34px;
+ font-size:30px;
  font-weight:800;
- color:#2563eb
+ letter-spacing:-1px;
 }
 
 .version{
- font-size:12px;
- color:#64748b;
- margin:7px
+ font-size:11px;
+ color:var(--muted);
+ margin-top:6px;
 }
 
-h1{font-size:26px;margin:20px 0 8px}
+.theme-btn{
+ width:auto;
+ margin:0;
+ padding:10px 13px;
+ border:1px solid var(--border);
+ background:var(--soft);
+ color:var(--text);
+ border-radius:10px;
+ font-size:13px;
+}
+
+.theme-btn:hover{
+ opacity:.8;
+ background:var(--soft);
+}
+
+h1{
+ font-size:26px;
+ margin:28px 0 8px;
+}
 
 .subtitle{
- color:#64748b;
+ color:var(--muted);
  line-height:1.6;
- font-size:14px
+ font-size:14px;
 }
 
 input{
  width:100%;
  padding:16px;
  margin-top:22px;
- border:2px solid #dbe3ef;
+ border:1px solid var(--border);
  border-radius:11px;
- font-size:15px
+ font-size:15px;
+ outline:none;
+ background:var(--input);
+ color:var(--text);
+}
+
+input:focus{
+ border-color:var(--muted);
 }
 
 button{
  width:100%;
  padding:15px;
  margin-top:13px;
- background:#2563eb;
- color:white;
+ background:var(--button);
+ color:var(--button-text);
  border:0;
  border-radius:11px;
  font-size:16px;
  font-weight:bold;
- cursor:pointer
+ cursor:pointer;
 }
 
-button:hover{background:#1d4ed8}
+button:hover{opacity:.85}
 
 button:disabled{
- opacity:.6;
- cursor:not-allowed
+ opacity:.5;
+ cursor:not-allowed;
 }
 
 .platforms{
  display:flex;
  gap:10px;
- margin-top:14px
+ margin-top:14px;
 }
 
-.platforms button{font-size:14px}
+.platforms button{
+ background:var(--soft);
+ color:var(--text);
+ border:1px solid var(--border);
+ font-size:14px;
+}
 
 #message{
  margin-top:18px;
  font-size:14px;
- line-height:1.5
+ line-height:1.5;
+ color:var(--muted);
+ overflow-wrap:anywhere;
 }
 
 .preview{
  display:none;
  margin-top:20px;
  text-align:left;
- border:1px solid #e2e8f0;
+ border:1px solid var(--border);
  border-radius:14px;
- overflow:hidden
+ overflow:hidden;
 }
 
 .preview img{
  width:100%;
- display:block
+ display:block;
 }
 
 .details{padding:15px}
@@ -113,30 +182,13 @@ button:disabled{
 .details h3{
  margin:0 0 8px;
  font-size:17px;
- overflow-wrap:anywhere
+ overflow-wrap:anywhere;
 }
 
 .details p{
  font-size:13px;
- color:#64748b
-}
-
-.open-link,.download-link{
- display:block;
- text-decoration:none;
- text-align:center;
- padding:13px;
- background:#eff6ff;
- color:#1d4ed8;
- border-radius:9px;
- font-weight:bold;
- margin-top:12px
-}
-
-.download-link{
- display:none;
- background:#16a34a;
- color:white
+ color:var(--muted);
+ line-height:1.5;
 }
 
 .instagram-frame{
@@ -144,41 +196,74 @@ button:disabled{
  width:100%;
  height:650px;
  border:0;
- background:#f8fafc
+ background:var(--soft);
+}
+
+.open-link,.download-link{
+ display:block;
+ text-decoration:none;
+ text-align:center;
+ padding:13px;
+ background:var(--soft);
+ color:var(--text);
+ border:1px solid var(--border);
+ border-radius:9px;
+ font-weight:bold;
+ margin-top:12px;
+}
+
+.download-link{
+ display:none;
+ background:#16803d;
+ color:white;
+ border-color:#16803d;
 }
 
 .info{
  margin-top:22px;
  padding:14px;
- background:#eff6ff;
- color:#475569;
+ background:var(--soft);
+ color:var(--muted);
  border-radius:10px;
  font-size:12px;
- line-height:1.6
+ line-height:1.7;
+ text-align:left;
 }
 
 footer{
  margin-top:22px;
- color:#94a3b8;
- font-size:12px
+ color:var(--muted);
+ font-size:12px;
 }
 
 @media(max-width:480px){
  body{padding:12px}
- .container{padding:25px 17px}
- .logo{font-size:30px}
+ .container{padding:22px 16px}
+ .logo{font-size:25px}
  h1{font-size:23px}
  .instagram-frame{height:600px}
+ .theme-btn{font-size:12px;padding:9px}
 }
 </style>
 </head>
 
-<body>
+<body data-theme="dark">
 
 <div class="container">
 
- <div class="logo">VideoFetch</div>
- <div class="version">VERSION 2.0 • ADVANCED</div>
+ <div class="topbar">
+  <div style="text-align:left">
+   <div class="logo">VideoFetch</div>
+   <div class="version">VERSION 2.0 • ADVANCED</div>
+  </div>
+
+  <button
+   class="theme-btn"
+   id="themeButton"
+   onclick="toggleTheme()">
+   ☀️ Light Mode
+  </button>
+ </div>
 
  <h1>Video Information Finder</h1>
 
@@ -189,8 +274,7 @@ footer{
  <input
   id="videoUrl"
   type="url"
-  placeholder="Paste your video link here..."
- >
+  placeholder="Paste your video link here...">
 
  <button id="checkButton" onclick="checkVideo()">
   Check Video
@@ -234,26 +318,69 @@ footer{
     id="downloadLink"
     class="download-link"
     download>
-    Download Authorized Video
+    ⬇ Download Authorized Video
    </a>
 
   </div>
  </div>
 
  <div class="info">
+  <strong>About VideoFetch</strong><br>
   YouTube: Title and thumbnail where available.<br>
   Instagram: Embedded preview where available.<br>
   Direct video files: Download only when the source permits it.<br>
   Only use videos you own or have permission to download.
  </div>
 
- <footer>© 2026 VideoFetch. All Rights Reserved.</footer>
+ <footer>
+  © 2026 VideoFetch. All Rights Reserved.
+ </footer>
 
 </div>
 
 <script>
 
 const API_BASE = "https://videofetch-khy3.onrender.com";
+
+// THEME SETTINGS
+
+function applyTheme(theme){
+
+ document.body.setAttribute("data-theme",theme);
+
+ const button = document.getElementById("themeButton");
+
+ button.textContent = theme === "dark"
+  ? "☀️ Light Mode"
+  : "🌙 Dark Mode";
+
+ try{
+  localStorage.setItem("videofetch-theme",theme);
+ }catch(error){}
+}
+
+function toggleTheme(){
+
+ const current = document.body.getAttribute("data-theme");
+
+ applyTheme(current === "dark" ? "light" : "dark");
+}
+
+try{
+
+ const savedTheme = localStorage.getItem("videofetch-theme");
+
+ if(savedTheme === "light" || savedTheme === "dark"){
+  applyTheme(savedTheme);
+ }else{
+  applyTheme("dark");
+ }
+
+}catch(error){
+ applyTheme("dark");
+}
+
+// PLATFORM BUTTONS
 
 function openPlatform(platform){
 
@@ -265,6 +392,8 @@ function openPlatform(platform){
 
  input.focus();
 }
+
+// RESET PREVIEW
 
 function resetPreview(){
 
@@ -283,12 +412,13 @@ function showMessage(text){
  document.getElementById("message").textContent = text;
 }
 
+// INSTAGRAM EMBED
+
 function getInstagramEmbed(url){
 
  const parts = url.pathname.split("/").filter(Boolean);
 
  const type = parts[0];
-
  const shortcode = parts[1];
 
  const allowedTypes = ["p","reel","reels","tv"];
@@ -306,16 +436,16 @@ function getInstagramEmbed(url){
  };
 }
 
+// MAIN FUNCTION
+
 async function checkVideo(){
 
  const input = document.getElementById("videoUrl");
-
  const button = document.getElementById("checkButton");
 
  const text = input.value.trim();
 
  resetPreview();
-
  showMessage("");
 
  if(!text){
@@ -339,7 +469,7 @@ async function checkVideo(){
 
  const host = url.hostname.toLowerCase();
 
- // INSTAGRAM PREVIEW
+ // INSTAGRAM
 
  if(host === "instagram.com" || host.endsWith(".instagram.com")){
 
@@ -356,7 +486,7 @@ async function checkVideo(){
     : "Instagram Reel Preview";
 
   document.getElementById("videoAuthor").textContent =
-   "Instagram content preview. Availability depends on the original post settings.";
+   "Instagram preview. Availability depends on the original post settings.";
 
   const frame = document.getElementById("instagramFrame");
 
@@ -472,6 +602,5 @@ async function checkVideo(){
 }
 
 </script>
-
 </body>
 </html>
