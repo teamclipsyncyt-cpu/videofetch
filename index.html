@@ -7,67 +7,180 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
- margin:0;min-height:100vh;padding:20px;
- font-family:Arial,sans-serif;color:white;
+ margin:0;
+ min-height:100vh;
+ padding:20px;
+ font-family:Arial,sans-serif;
+ color:white;
  background:linear-gradient(135deg,#080f20,#172e52);
- display:flex;align-items:center;justify-content:center
+ display:flex;
+ align-items:center;
+ justify-content:center
 }
+
 .container{
- width:100%;max-width:600px;background:#fff;color:#172033;
- border-radius:22px;padding:30px 24px;
- box-shadow:0 20px 60px #0005;text-align:center
+ width:100%;
+ max-width:600px;
+ background:#fff;
+ color:#172033;
+ border-radius:22px;
+ padding:30px 24px;
+ box-shadow:0 20px 60px #0005;
+ text-align:center
 }
-.logo{font-size:34px;font-weight:800;color:#2563eb}
-.version{font-size:12px;color:#64748b;margin:7px}
+
+.logo{
+ font-size:34px;
+ font-weight:800;
+ color:#2563eb
+}
+
+.version{
+ font-size:12px;
+ color:#64748b;
+ margin:7px
+}
+
 h1{font-size:26px;margin:20px 0 8px}
-.subtitle{color:#64748b;line-height:1.6;font-size:14px}
+
+.subtitle{
+ color:#64748b;
+ line-height:1.6;
+ font-size:14px
+}
+
 input{
- width:100%;padding:16px;margin-top:22px;
- border:2px solid #dbe3ef;border-radius:11px;font-size:15px
+ width:100%;
+ padding:16px;
+ margin-top:22px;
+ border:2px solid #dbe3ef;
+ border-radius:11px;
+ font-size:15px
 }
+
 button{
- width:100%;padding:15px;margin-top:13px;
- background:#2563eb;color:white;border:0;
- border-radius:11px;font-size:16px;font-weight:bold;cursor:pointer
+ width:100%;
+ padding:15px;
+ margin-top:13px;
+ background:#2563eb;
+ color:white;
+ border:0;
+ border-radius:11px;
+ font-size:16px;
+ font-weight:bold;
+ cursor:pointer
 }
+
 button:hover{background:#1d4ed8}
-.platforms{display:flex;gap:10px;margin-top:14px}
+
+button:disabled{
+ opacity:.6;
+ cursor:not-allowed
+}
+
+.platforms{
+ display:flex;
+ gap:10px;
+ margin-top:14px
+}
+
 .platforms button{font-size:14px}
-#message{margin-top:18px;font-size:14px;line-height:1.5}
+
+#message{
+ margin-top:18px;
+ font-size:14px;
+ line-height:1.5
+}
+
 .preview{
- display:none;margin-top:20px;text-align:left;
- border:1px solid #e2e8f0;border-radius:14px;overflow:hidden
+ display:none;
+ margin-top:20px;
+ text-align:left;
+ border:1px solid #e2e8f0;
+ border-radius:14px;
+ overflow:hidden
 }
-.preview img{width:100%;display:block}
+
+.preview img{
+ width:100%;
+ display:block
+}
+
 .details{padding:15px}
-.details h3{margin:0 0 8px;font-size:17px}
-.details p{font-size:13px;color:#64748b}
-.open-link{
- display:block;text-decoration:none;text-align:center;
- padding:13px;background:#eff6ff;color:#1d4ed8;
- border-radius:9px;font-weight:bold;margin-top:12px
+
+.details h3{
+ margin:0 0 8px;
+ font-size:17px;
+ overflow-wrap:anywhere
 }
+
+.details p{
+ font-size:13px;
+ color:#64748b
+}
+
+.open-link,.download-link{
+ display:block;
+ text-decoration:none;
+ text-align:center;
+ padding:13px;
+ background:#eff6ff;
+ color:#1d4ed8;
+ border-radius:9px;
+ font-weight:bold;
+ margin-top:12px
+}
+
+.download-link{
+ display:none;
+ background:#16a34a;
+ color:white
+}
+
 .info{
- margin-top:22px;padding:14px;background:#eff6ff;
- color:#475569;border-radius:10px;font-size:12px;line-height:1.6
+ margin-top:22px;
+ padding:14px;
+ background:#eff6ff;
+ color:#475569;
+ border-radius:10px;
+ font-size:12px;
+ line-height:1.6
 }
-footer{margin-top:22px;color:#94a3b8;font-size:12px}
+
+footer{
+ margin-top:22px;
+ color:#94a3b8;
+ font-size:12px
+}
+
+@media(max-width:480px){
+ body{padding:12px}
+ .container{padding:25px 17px}
+ .logo{font-size:30px}
+ h1{font-size:23px}
+}
 </style>
 </head>
 
 <body>
 <div class="container">
+
  <div class="logo">VideoFetch</div>
  <div class="version">VERSION 2.0 • ADVANCED</div>
 
  <h1>Video Information Finder</h1>
+
  <p class="subtitle">
   Paste a YouTube or Instagram link to check available video information.
  </p>
 
- <input id="videoUrl" type="url"
- placeholder="Paste your video link here...">
+ <input
+  id="videoUrl"
+  type="url"
+  placeholder="Paste your video link here..."
+ >
 
  <button id="checkButton" onclick="checkVideo()">
   Check Video
@@ -81,73 +194,164 @@ footer{margin-top:22px;color:#94a3b8;font-size:12px}
  <div id="message" role="status" aria-live="polite"></div>
 
  <div class="preview" id="preview">
+
   <img id="thumbnail" alt="Video thumbnail">
+
   <div class="details">
+
    <h3 id="videoTitle"></h3>
+
    <p id="videoAuthor"></p>
-   <a id="openLink" class="open-link"
-      target="_blank" rel="noopener">
-      Open Original Video
+
+   <a
+    id="openLink"
+    class="open-link"
+    target="_blank"
+    rel="noopener"
+   >
+    ▶ Open Original Video
    </a>
+
+   <a
+    id="downloadLink"
+    class="download-link"
+    download
+   >
+    ⬇ Download Authorized Video
+   </a>
+
   </div>
  </div>
 
  <div class="info">
   YouTube: Title and thumbnail where available.<br>
   Instagram: Open the original post.<br>
-  Direct video files: Supported only when the source allows downloading.
-  Only use videos you own or have permission to download.
+  Direct video files: Download only when the source permits it.<br>
+  Only download videos you own or have permission to download.
  </div>
 
- <footer>© 2026 VideoFetch. All Rights Reserved.</footer>
+ <footer>
+  © 2026 VideoFetch. All Rights Reserved.
+ </footer>
+
 </div>
 
 <script>
+
 const API_BASE = "https://videofetch-khy3.onrender.com";
 
 function openPlatform(platform){
+
  const input = document.getElementById("videoUrl");
+
  input.value = platform === "youtube"
   ? "https://www.youtube.com/"
   : "https://www.instagram.com/";
+
  input.focus();
 }
 
+function showMessage(text){
+ document.getElementById("message").textContent = text;
+}
+
+function resetPreview(){
+ document.getElementById("preview").style.display = "none";
+
+ document.getElementById("downloadLink").style.display = "none";
+
+ document.getElementById("thumbnail").src = "";
+}
+
 async function checkVideo(){
+
  const input = document.getElementById("videoUrl");
- const message = document.getElementById("message");
- const preview = document.getElementById("preview");
  const button = document.getElementById("checkButton");
+
  const text = input.value.trim();
 
- preview.style.display = "none";
- message.textContent = "";
+ resetPreview();
+ showMessage("");
 
  if(!text){
-  message.textContent = "Please paste a video link.";
+  showMessage("Please paste a video link.");
   return;
  }
 
  let url;
+
  try{
   url = new URL(text);
  }catch{
-  message.textContent = "Please enter a valid link.";
+  showMessage("Please enter a valid link.");
   return;
  }
 
  if(!["https:","http:"].includes(url.protocol)){
-  message.textContent = "Invalid link.";
+  showMessage("Invalid link.");
   return;
  }
 
  const host = url.hostname.toLowerCase();
 
+ // Instagram links
+
  if(host === "instagram.com" || host.endsWith(".instagram.com")){
-  message.textContent = "Opening Instagram original post...";
-  window.open(url.href,"_blank","noopener,noreferrer");
+
+  const preview = document.getElementById("preview");
+
+  document.getElementById("videoTitle").textContent =
+   "Instagram Video";
+
+  document.getElementById("videoAuthor").textContent =
+   "Open the original Instagram post to view the video.";
+
+  document.getElementById("thumbnail").style.display = "none";
+
+  const openLink = document.getElementById("openLink");
+
+  openLink.href = url.href;
+  openLink.textContent = "▶ Open Instagram Post";
+
+  preview.style.display = "block";
+
+  showMessage("Instagram link recognized successfully!");
+
   return;
  }
+
+ // Direct video file links
+
+ if(/\.(mp4|webm|mov|m4v)$/i.test(url.pathname)){
+
+  const preview = document.getElementById("preview");
+
+  document.getElementById("videoTitle").textContent =
+   "Direct Video File";
+
+  document.getElementById("videoAuthor").textContent =
+   "Direct video link detected.";
+
+  document.getElementById("thumbnail").style.display = "none";
+
+  document.getElementById("openLink").href = url.href;
+  document.getElementById("openLink").textContent = "▶ Open Video";
+
+  const downloadLink = document.getElementById("downloadLink");
+
+  downloadLink.href = url.href;
+  downloadLink.style.display = "block";
+
+  preview.style.display = "block";
+
+  showMessage(
+   "Video link detected. Download availability depends on the source server."
+  );
+
+  return;
+ }
+
+ // YouTube links
 
  const youtube =
   host === "youtube.com" ||
@@ -157,39 +361,26 @@ async function checkVideo(){
   host.endsWith(".youtube.com");
 
  if(!youtube){
-  if(/\.(mp4|webm|mov|m4v)$/i.test(url.pathname)){
-   const link = document.createElement("a");
-   link.href = url.href;
-   link.download = "VideoFetch-video";
-   link.target = "_blank";
-   link.rel = "noopener";
-   document.body.appendChild(link);
-   link.click();
-   link.remove();
-   message.textContent =
-    "Download requested. The source server must allow it.";
-  }else{
-   message.textContent =
-    "Please enter a YouTube, Instagram or direct video link.";
-  }
-  return;
- }
 
- if(API_BASE.includes("YOUR-RENDER-SERVICE")){
-  message.textContent =
-   "Backend setup is not complete. Add your Render service URL in the code.";
+  showMessage(
+   "Please enter a YouTube, Instagram or direct video link."
+  );
+
   return;
  }
 
  button.disabled = true;
  button.textContent = "Loading...";
- message.textContent = "Getting video information...";
+
+ showMessage("Getting video information...");
 
  try{
-  const apiUrl = API_BASE + "/api/video?url=" +
-    encodeURIComponent(url.href);
+
+  const apiUrl =
+   API_BASE + "/api/video?url=" + encodeURIComponent(url.href);
 
   const response = await fetch(apiUrl);
+
   const data = await response.json();
 
   if(!response.ok){
@@ -197,30 +388,47 @@ async function checkVideo(){
   }
 
   document.getElementById("videoTitle").textContent =
-    data.title || "Video title unavailable";
+   data.title || "Video title unavailable";
 
   document.getElementById("videoAuthor").textContent =
-    data.author ? "Channel: " + data.author : data.platform;
+   data.author ? "Channel: " + data.author : data.platform;
 
-  document.getElementById("openLink").href = data.videoUrl;
+  const openLink = document.getElementById("openLink");
+
+  openLink.href = data.videoUrl;
+  openLink.textContent = "▶ Open Original Video";
+
+  const thumbnail = document.getElementById("thumbnail");
 
   if(data.thumbnail){
-   document.getElementById("thumbnail").src = data.thumbnail;
-   document.getElementById("thumbnail").style.display = "block";
+
+   thumbnail.src = data.thumbnail;
+   thumbnail.style.display = "block";
+
   }else{
-   document.getElementById("thumbnail").style.display = "none";
+
+   thumbnail.style.display = "none";
+
   }
 
-  preview.style.display = "block";
-  message.textContent = "Video information loaded successfully!";
+  document.getElementById("preview").style.display = "block";
+
+  showMessage("Video information loaded successfully!");
 
  }catch(error){
-  message.textContent = error.message;
+
+  showMessage(error.message || "Something went wrong.");
+
  }finally{
+
   button.disabled = false;
   button.textContent = "Check Video";
+
  }
+
 }
+
 </script>
+
 </body>
 </html>
