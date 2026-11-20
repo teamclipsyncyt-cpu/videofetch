@@ -139,6 +139,14 @@ button:disabled{
  color:white
 }
 
+.instagram-frame{
+ display:none;
+ width:100%;
+ height:650px;
+ border:0;
+ background:#f8fafc
+}
+
 .info{
  margin-top:22px;
  padding:14px;
@@ -160,11 +168,13 @@ footer{
  .container{padding:25px 17px}
  .logo{font-size:30px}
  h1{font-size:23px}
+ .instagram-frame{height:600px}
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
  <div class="logo">VideoFetch</div>
@@ -197,6 +207,15 @@ footer{
 
   <img id="thumbnail" alt="Video thumbnail">
 
+  <iframe
+   id="instagramFrame"
+   class="instagram-frame"
+   title="Instagram post preview"
+   loading="lazy"
+   allowfullscreen
+   referrerpolicy="strict-origin-when-cross-origin">
+  </iframe>
+
   <div class="details">
 
    <h3 id="videoTitle"></h3>
@@ -207,17 +226,15 @@ footer{
     id="openLink"
     class="open-link"
     target="_blank"
-    rel="noopener"
-   >
-    ▶ Open Original Video
+    rel="noopener">
+    Open Original Video
    </a>
 
    <a
     id="downloadLink"
     class="download-link"
-    download
-   >
-    ⬇ Download Authorized Video
+    download>
+    Download Authorized Video
    </a>
 
   </div>
@@ -225,14 +242,12 @@ footer{
 
  <div class="info">
   YouTube: Title and thumbnail where available.<br>
-  Instagram: Open the original post.<br>
+  Instagram: Embedded preview where available.<br>
   Direct video files: Download only when the source permits it.<br>
-  Only download videos you own or have permission to download.
+  Only use videos you own or have permission to download.
  </div>
 
- <footer>
-  © 2026 VideoFetch. All Rights Reserved.
- </footer>
+ <footer>© 2026 VideoFetch. All Rights Reserved.</footer>
 
 </div>
 
@@ -251,26 +266,56 @@ function openPlatform(platform){
  input.focus();
 }
 
+function resetPreview(){
+
+ document.getElementById("preview").style.display = "none";
+
+ document.getElementById("thumbnail").style.display = "none";
+
+ document.getElementById("instagramFrame").style.display = "none";
+
+ document.getElementById("instagramFrame").src = "about:blank";
+
+ document.getElementById("downloadLink").style.display = "none";
+}
+
 function showMessage(text){
  document.getElementById("message").textContent = text;
 }
 
-function resetPreview(){
- document.getElementById("preview").style.display = "none";
+function getInstagramEmbed(url){
 
- document.getElementById("downloadLink").style.display = "none";
+ const parts = url.pathname.split("/").filter(Boolean);
 
- document.getElementById("thumbnail").src = "";
+ const type = parts[0];
+
+ const shortcode = parts[1];
+
+ const allowedTypes = ["p","reel","reels","tv"];
+
+ if(!allowedTypes.includes(type) || !shortcode){
+  return null;
+ }
+
+ return {
+  type:type,
+  shortcode:shortcode,
+  embedUrl:
+   "https://www.instagram.com/" +
+   type + "/" + encodeURIComponent(shortcode) + "/embed/"
+ };
 }
 
 async function checkVideo(){
 
  const input = document.getElementById("videoUrl");
+
  const button = document.getElementById("checkButton");
 
  const text = input.value.trim();
 
  resetPreview();
+
  showMessage("");
 
  if(!text){
@@ -294,37 +339,45 @@ async function checkVideo(){
 
  const host = url.hostname.toLowerCase();
 
- // Instagram links
+ // INSTAGRAM PREVIEW
 
  if(host === "instagram.com" || host.endsWith(".instagram.com")){
 
-  const preview = document.getElementById("preview");
+  const instagram = getInstagramEmbed(url);
+
+  if(!instagram){
+   showMessage("Please enter a valid Instagram Reel or Post link.");
+   return;
+  }
 
   document.getElementById("videoTitle").textContent =
-   "Instagram Video";
+   instagram.type === "p"
+    ? "Instagram Post Preview"
+    : "Instagram Reel Preview";
 
   document.getElementById("videoAuthor").textContent =
-   "Open the original Instagram post to view the video.";
+   "Instagram content preview. Availability depends on the original post settings.";
 
-  document.getElementById("thumbnail").style.display = "none";
+  const frame = document.getElementById("instagramFrame");
+
+  frame.src = instagram.embedUrl;
+  frame.style.display = "block";
 
   const openLink = document.getElementById("openLink");
 
   openLink.href = url.href;
-  openLink.textContent = "▶ Open Instagram Post";
+  openLink.textContent = "Open Original Instagram Post";
 
-  preview.style.display = "block";
+  document.getElementById("preview").style.display = "block";
 
-  showMessage("Instagram link recognized successfully!");
+  showMessage("Instagram link recognized. Loading preview...");
 
   return;
  }
 
- // Direct video file links
+ // DIRECT VIDEO FILE
 
  if(/\.(mp4|webm|mov|m4v)$/i.test(url.pathname)){
-
-  const preview = document.getElementById("preview");
 
   document.getElementById("videoTitle").textContent =
    "Direct Video File";
@@ -332,26 +385,26 @@ async function checkVideo(){
   document.getElementById("videoAuthor").textContent =
    "Direct video link detected.";
 
-  document.getElementById("thumbnail").style.display = "none";
+  const openLink = document.getElementById("openLink");
 
-  document.getElementById("openLink").href = url.href;
-  document.getElementById("openLink").textContent = "▶ Open Video";
+  openLink.href = url.href;
+  openLink.textContent = "Open Video";
 
   const downloadLink = document.getElementById("downloadLink");
 
   downloadLink.href = url.href;
   downloadLink.style.display = "block";
 
-  preview.style.display = "block";
+  document.getElementById("preview").style.display = "block";
 
   showMessage(
-   "Video link detected. Download availability depends on the source server."
+   "Video detected. Download depends on source permissions."
   );
 
   return;
  }
 
- // YouTube links
+ // YOUTUBE
 
  const youtube =
   host === "youtube.com" ||
@@ -361,11 +414,7 @@ async function checkVideo(){
   host.endsWith(".youtube.com");
 
  if(!youtube){
-
-  showMessage(
-   "Please enter a YouTube, Instagram or direct video link."
-  );
-
+  showMessage("Please enter a YouTube, Instagram or direct video link.");
   return;
  }
 
@@ -396,19 +445,13 @@ async function checkVideo(){
   const openLink = document.getElementById("openLink");
 
   openLink.href = data.videoUrl;
-  openLink.textContent = "▶ Open Original Video";
+  openLink.textContent = "Open Original Video";
 
   const thumbnail = document.getElementById("thumbnail");
 
   if(data.thumbnail){
-
    thumbnail.src = data.thumbnail;
    thumbnail.style.display = "block";
-
-  }else{
-
-   thumbnail.style.display = "none";
-
   }
 
   document.getElementById("preview").style.display = "block";
