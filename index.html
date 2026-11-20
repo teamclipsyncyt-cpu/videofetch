@@ -3,751 +3,266 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080808">
-<meta name="description" content="VideoFetch 3.0 - Video Information Finder">
-<title>VideoFetch 3.0</title>
-
+<title>VideoFetch 4.0</title>
 <style>
+:root{--bg:#080808;--card:#151515;--text:#fff;--muted:#aaa;--line:#303030;--accent:#fff}
+body.light{--bg:#f4f4f4;--card:#fff;--text:#111;--muted:#666;--line:#ddd;--accent:#111}
 *{box-sizing:border-box}
-
-:root{
- --bg:#080808;
- --card:#111111;
- --text:#ffffff;
- --muted:#999999;
- --border:#292929;
- --input:#191919;
- --soft:#1c1c1c;
- --button:#ffffff;
- --button-text:#080808;
- --accent:#bdbdbd;
- --shadow:#0009;
-}
-
-body[data-theme="light"]{
- --bg:#eeeeee;
- --card:#ffffff;
- --text:#111111;
- --muted:#666666;
- --border:#dddddd;
- --input:#f7f7f7;
- --soft:#f1f1f1;
- --button:#111111;
- --button-text:#ffffff;
- --accent:#444444;
- --shadow:#0002;
-}
-
-html{scroll-behavior:smooth}
-
-body{
- margin:0;
- min-height:100vh;
- min-height:100dvh;
- padding:25px 15px;
- font-family:Arial,sans-serif;
- color:var(--text);
- background:
- radial-gradient(ellipse at top, #33333333, transparent 55%),
- var(--bg);
- display:flex;
- align-items:center;
- justify-content:center;
- transition:.25s;
-}
-
-.container{
- width:100%;
- max-width:620px;
- padding:28px;
- border:1px solid var(--border);
- border-radius:24px;
- background:var(--card);
- box-shadow:0 25px 70px var(--shadow);
- text-align:center;
-}
-
-.topbar{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:12px;
-}
-
-.brand{
- display:flex;
- align-items:center;
- gap:11px;
- text-align:left;
-}
-
-.logo-icon{
- width:44px;
- height:44px;
- display:flex;
- align-items:center;
- justify-content:center;
- border-radius:13px;
- background:var(--button);
- color:var(--button-text);
- font-size:21px;
- font-weight:900;
-}
-
-.logo{
- font-size:25px;
- font-weight:900;
- letter-spacing:-1px;
-}
-
-.version{
- margin-top:5px;
- color:var(--muted);
- font-size:9px;
- letter-spacing:1.5px;
-}
-
-.theme-btn{
- width:auto;
- min-height:42px;
- margin:0;
- padding:10px 13px;
- background:var(--soft);
- color:var(--text);
- border:1px solid var(--border);
- border-radius:10px;
- font-size:12px;
- font-weight:bold;
-}
-
-.hero{
- margin-top:38px;
-}
-
-.tag{
- display:inline-block;
- padding:7px 13px;
- border:1px solid var(--border);
- border-radius:30px;
- color:var(--muted);
- font-size:11px;
- letter-spacing:1px;
-}
-
-h1{
- margin:17px 0 10px;
- font-size:32px;
- letter-spacing:-1px;
- line-height:1.2;
-}
-
-.subtitle{
- max-width:430px;
- margin:0 auto;
- color:var(--muted);
- font-size:14px;
- line-height:1.7;
-}
-
-.input-area{
- margin-top:28px;
- padding:7px;
- background:var(--input);
- border:1px solid var(--border);
- border-radius:14px;
-}
-
-input{
- width:100%;
- min-height:51px;
- padding:14px;
- border:0;
- outline:none;
- border-radius:10px;
- background:transparent;
- color:var(--text);
- font-size:16px;
-}
-
-input::placeholder{color:var(--muted)}
-
-input:focus{
- outline:1px solid var(--accent);
-}
-
-button{
- width:100%;
- min-height:49px;
- margin-top:12px;
- padding:14px;
- border:0;
- border-radius:11px;
- background:var(--button);
- color:var(--button-text);
- font-size:15px;
- font-weight:bold;
- cursor:pointer;
- transition:transform .2s,opacity .2s;
- touch-action:manipulation;
-}
-
-button:hover{
- opacity:.86;
- transform:translateY(-1px);
-}
-
-button:disabled{
- opacity:.55;
- cursor:wait;
- transform:none;
-}
-
-.platforms{
- display:flex;
- gap:10px;
- margin-top:14px;
-}
-
-.platforms button{
- flex:1;
- margin-top:0;
- background:var(--soft);
- color:var(--text);
- border:1px solid var(--border);
-}
-
-.platforms button:hover{
- background:var(--border);
-}
-
-#message{
- margin-top:18px;
- min-height:20px;
- color:var(--muted);
- font-size:13px;
- line-height:1.6;
- overflow-wrap:anywhere;
-}
-
-.preview{
- display:none;
- margin-top:23px;
- text-align:left;
- border:1px solid var(--border);
- border-radius:16px;
- overflow:hidden;
- background:var(--soft);
- animation:appear .35s ease;
-}
-
-@keyframes appear{
- from{opacity:0;transform:translateY(10px)}
- to{opacity:1;transform:translateY(0)}
-}
-
-.preview img{
- width:100%;
- height:auto;
- display:block;
-}
-
-.instagram-frame{
- display:none;
- width:100%;
- height:650px;
- border:0;
- background:var(--soft);
-}
-
-.details{
- padding:17px;
-}
-
-.details h3{
- margin:0 0 8px;
- font-size:18px;
- line-height:1.4;
- overflow-wrap:anywhere;
-}
-
-.details p{
- color:var(--muted);
- font-size:13px;
- line-height:1.6;
- overflow-wrap:anywhere;
-}
-
-.open-link,.download-link{
- display:block;
- margin-top:12px;
- padding:14px;
- border-radius:10px;
- text-align:center;
- text-decoration:none;
- font-size:14px;
- font-weight:bold;
- background:var(--card);
- color:var(--text);
- border:1px solid var(--border);
- overflow-wrap:anywhere;
-}
-
-.open-link:hover{
- opacity:.8;
-}
-
-.download-link{
- display:none;
- background:#16803d;
- color:white;
- border-color:#16803d;
-}
-
-.info{
- margin-top:25px;
- padding:17px;
- border:1px solid var(--border);
- border-radius:13px;
- background:var(--soft);
- text-align:left;
- color:var(--muted);
- font-size:12px;
- line-height:1.9;
-}
-
-.info strong{
- color:var(--text);
- font-size:13px;
-}
-
-.info-title{
- margin-bottom:7px;
-}
-
-footer{
- margin-top:25px;
- color:var(--muted);
- font-size:11px;
- line-height:1.7;
-}
-
-button:focus-visible,
-a:focus-visible,
-input:focus-visible{
- outline:2px solid var(--accent);
- outline-offset:3px;
-}
-
-@media(max-width:480px){
- body{
-  padding:12px;
-  align-items:flex-start;
- }
-
- .container{
-  padding:20px 15px;
-  border-radius:19px;
-  margin:auto 0;
- }
-
- .logo{font-size:22px}
- .logo-icon{width:40px;height:40px}
- .version{font-size:8px}
- .theme-btn{font-size:11px;padding:9px}
- .hero{margin-top:30px}
- h1{font-size:26px}
- .subtitle{font-size:13px}
- .instagram-frame{height:560px}
- .details{padding:14px}
- .info{padding:14px}
-}
-
-@media(max-width:350px){
- .container{padding:16px 11px}
- .logo{font-size:19px}
- .logo-icon{width:35px;height:35px}
- .theme-btn{font-size:10px;padding:8px}
- h1{font-size:23px}
- .instagram-frame{height:500px}
-}
-
-@media(prefers-reduced-motion:reduce){
- *,*::before,*::after{
-  animation:none!important;
-  transition:none!important;
- }
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;transition:.25s}
+header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+.brand{font-size:23px;font-weight:800;letter-spacing:-1px}
+.brand span{background:var(--text);color:var(--bg);padding:7px 9px;border-radius:9px;margin-right:8px}
+.version{font-size:11px;color:var(--muted);display:block;margin:5px 0 0 42px}
+button,a{font:inherit}
+.theme{background:var(--card);color:var(--text);border:1px solid var(--line);padding:10px 14px;border-radius:10px;cursor:pointer}
+main{width:min(720px,92%);margin:45px auto}
+h1{font-size:36px;text-align:center;margin-bottom:10px}
+.sub{text-align:center;color:var(--muted);line-height:1.6;margin-bottom:28px}
+.search{display:flex;gap:9px;background:var(--card);border:1px solid var(--line);padding:9px;border-radius:15px}
+input{min-width:0;flex:1;background:transparent;border:0;outline:0;color:var(--text);padding:12px;font-size:15px}
+.primary{background:var(--accent);color:var(--bg);border:0;border-radius:10px;padding:13px 20px;font-weight:700;cursor:pointer}
+.secondary{background:var(--card);color:var(--text);border:1px solid var(--line);padding:11px 14px;border-radius:10px;text-decoration:none;display:inline-block;cursor:pointer}
+#status{text-align:center;color:var(--muted);margin:18px 0;min-height:22px}
+.panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:17px;padding:20px;margin-top:20px}
+.panel h2{margin-top:0}
+.preview{width:100%;border-radius:12px;max-height:380px;object-fit:contain;background:#000}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
+.info{color:var(--muted);font-size:14px;line-height:1.65}
+.steps{padding-left:20px;color:var(--muted);line-height:1.9}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:35px 15px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:6px 11px;font-size:12px;color:var(--muted);margin-bottom:14px}
+iframe{width:100%;height:500px;border:0;border-radius:12px;background:#000}
+@media(max-width:520px){
+ header{padding:16px 4%}
+ main{margin:32px auto}
+ h1{font-size:29px}
+ .search{flex-direction:column}
+ .primary{width:100%}
+ iframe{height:420px}
 }
 </style>
 </head>
+<body>
+<header>
+ <div>
+  <div class="brand"><span>V</span>VideoFetch</div>
+  <small class="version">VERSION 4.0 · SMART DOWNLOAD</small>
+ </div>
+ <button class="theme" onclick="toggleTheme()">☼ Theme</button>
+</header>
 
-<body data-theme="dark">
+<main>
+ <h1>VideoFetch 4.0</h1>
+ <p class="sub">Video link डालें और उपलब्ध आधिकारिक विकल्प देखें।<br>Simple. Smart. Safe.</p>
 
-<div class="container">
+ <div class="search">
+  <input id="url" type="url" placeholder="YouTube, Instagram या direct video link..." />
+  <button class="primary" onclick="processLink()">Check Link ↗</button>
+ </div>
+ <div id="status">अपना वीडियो लिंक यहाँ डालें।</div>
 
- <div class="topbar">
+ <section class="panel" id="result">
+  <span class="badge" id="platform">VIDEO</span>
+  <h2 id="title">Video Preview</h2>
+  <div id="previewArea"></div>
+  <div class="actions" id="mainActions"></div>
+ </section>
 
-  <div class="brand">
-   <div class="logo-icon">V</div>
-   <div>
-    <div class="logo">VideoFetch</div>
-    <div class="version">VERSION 3.0 • PROFESSIONAL</div>
-   </div>
+ <section class="panel" id="help">
+  <h2 id="helpTitle">Download Information</h2>
+  <p class="info" id="helpText"></p>
+  <ol class="steps" id="steps"></ol>
+  <div class="actions" id="helpActions"></div>
+ </section>
+
+ <section class="panel" id="directPanel">
+  <h2>Direct Video Download</h2>
+  <p class="info">यह direct video file link है। Download source server की अनुमति और उपलब्धता पर निर्भर करेगा।</p>
+  <div class="actions">
+   <a id="downloadBtn" class="primary" href="#" download>⬇ Download Video</a>
+   <a id="openDirect" class="secondary" href="#" target="_blank" rel="noopener">Open Video</a>
   </div>
+ </section>
+</main>
 
-  <button class="theme-btn" id="themeButton" onclick="toggleTheme()">
-   ☀️ Light Mode
-  </button>
-
- </div>
-
- <div class="hero">
-  <span class="tag">VIDEO TOOL • 3.0</span>
-
-  <h1>Video Information Finder</h1>
-
-  <p class="subtitle">
-   Paste your video link and explore available video information
-   with a clean and simple experience.
-  </p>
- </div>
-
- <div class="input-area">
-  <input
-   id="videoUrl"
-   type="url"
-   placeholder="Paste your video link here..."
-   autocomplete="url"
-   aria-label="Video link">
- </div>
-
- <button id="checkButton" onclick="checkVideo()">
-  🔍 Check Video
- </button>
-
- <div class="platforms">
-  <button onclick="openPlatform('youtube')">▶ YouTube</button>
-  <button onclick="openPlatform('instagram')">◎ Instagram</button>
- </div>
-
- <div id="message" role="status" aria-live="polite"></div>
-
- <div class="preview" id="preview">
-
-  <img id="thumbnail" alt="Video thumbnail">
-
-  <iframe
-   id="instagramFrame"
-   class="instagram-frame"
-   title="Instagram post preview"
-   loading="lazy"
-   allowfullscreen
-   referrerpolicy="strict-origin-when-cross-origin">
-  </iframe>
-
-  <div class="details">
-
-   <h3 id="videoTitle"></h3>
-
-   <p id="videoAuthor"></p>
-
-   <a
-    id="openLink"
-    class="open-link"
-    target="_blank"
-    rel="noopener">
-    Open Original Video
-   </a>
-
-   <a
-    id="downloadLink"
-    class="download-link"
-    download>
-    ⬇ Download Authorized Video
-   </a>
-
-  </div>
- </div>
-
- <div class="info">
-  <div class="info-title"><strong>About VideoFetch</strong></div>
-  YouTube: Title and thumbnail where available.<br>
-  Instagram: Embedded preview where available.<br>
-  Direct video files: Download only when the source permits it.<br>
-  Only use videos you own or have permission to download.
- </div>
-
- <footer>
-  © 2026 VideoFetch. All Rights Reserved.
- </footer>
-
-</div>
+<footer>
+ VideoFetch 4.0 · Use only content you own or have permission to download.
+</footer>
 
 <script>
-
 const API_BASE = "https://videofetch-khy3.onrender.com";
 
-// THEME SETTINGS
-
-function applyTheme(theme){
-
- document.body.setAttribute("data-theme",theme);
-
- const button = document.getElementById("themeButton");
-
- button.textContent = theme === "dark"
-  ? "☀️ Light Mode"
-  : "🌙 Dark Mode";
-
- try{
-  localStorage.setItem("videofetch-theme",theme);
- }catch(error){}
-}
+const $ = id => document.getElementById(id);
 
 function toggleTheme(){
-
- const current = document.body.getAttribute("data-theme");
-
- applyTheme(current === "dark" ? "light" : "dark");
+ document.body.classList.toggle("light");
 }
 
-try{
-
- const savedTheme = localStorage.getItem("videofetch-theme");
-
- if(savedTheme === "light" || savedTheme === "dark"){
-  applyTheme(savedTheme);
- }else{
-  applyTheme("dark");
- }
-
-}catch(error){
- applyTheme("dark");
+function showStatus(message){
+ $("status").textContent = message;
 }
 
-// PLATFORM BUTTONS
-
-function openPlatform(platform){
-
- const input = document.getElementById("videoUrl");
-
- input.value = platform === "youtube"
-  ? "https://www.youtube.com/"
-  : "https://www.instagram.com/";
-
- input.focus();
+function hidePanels(){
+ ["result","help","directPanel"].forEach(id => $(id).style.display="none");
 }
 
-// RESET PREVIEW
-
-function resetPreview(){
-
- document.getElementById("preview").style.display = "none";
-
- const thumbnail = document.getElementById("thumbnail");
-
- thumbnail.style.display = "none";
- thumbnail.removeAttribute("src");
-
- document.getElementById("instagramFrame").style.display = "none";
- document.getElementById("instagramFrame").src = "about:blank";
-
- document.getElementById("downloadLink").style.display = "none";
+function showHelp(title,text,steps,links=[]){
+ $("help").style.display="block";
+ $("helpTitle").textContent=title;
+ $("helpText").textContent=text;
+ $("steps").innerHTML=steps.map(s=>`<li>${s}</li>`).join("");
+ $("helpActions").innerHTML="";
+ links.forEach(item=>{
+  const a=document.createElement("a");
+  a.className="secondary";
+  a.href=item.url;
+  a.textContent=item.label;
+  a.target="_blank";
+  a.rel="noopener";
+  $("helpActions").appendChild(a);
+ });
 }
 
-// MESSAGE
-
-function showMessage(text){
- document.getElementById("message").textContent = text;
+function getInstagramInfo(url){
+ const match=url.match(/instagram\.com\/(p|reel|reels|tv)\/([^/?#]+)/i);
+ if(!match)return null;
+ return {type:match[1],code:match[2]};
 }
 
-// INSTAGRAM EMBED
-
-function getInstagramEmbed(url){
-
- const parts = url.pathname.split("/").filter(Boolean);
-
- const type = parts[0];
- const shortcode = parts[1];
-
- const allowedTypes = ["p","reel","reels","tv"];
-
- if(!allowedTypes.includes(type) || !shortcode){
-  return null;
- }
-
- return {
-  type:type,
-  shortcode:shortcode,
-  embedUrl:
-   "https://www.instagram.com/" +
-   type + "/" + encodeURIComponent(shortcode) + "/embed/"
- };
+function isDirectVideo(url){
+ return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(url);
 }
 
-// MAIN FUNCTION
+function isYouTube(url){
+ return /youtube\.com|youtu\.be/i.test(url);
+}
 
-async function checkVideo(){
+async function processLink(){
+ const url=$("url").value.trim();
+ hidePanels();
 
- const input = document.getElementById("videoUrl");
- const button = document.getElementById("checkButton");
-
- const text = input.value.trim();
-
- resetPreview();
- showMessage("");
-
- if(!text){
-  showMessage("Please paste a video link.");
+ if(!url){
+  showStatus("पहले वीडियो लिंक डालें।");
   return;
  }
-
- let url;
 
  try{
-  url = new URL(text);
- }catch{
-  showMessage("Please enter a valid link.");
+  new URL(url);
+ }catch(e){
+  showStatus("सही URL डालें।");
   return;
  }
 
- if(!["https:","http:"].includes(url.protocol)){
-  showMessage("Invalid link.");
+ showStatus("Link check हो रहा है...");
+
+ if(isDirectVideo(url)){
+  $("directPanel").style.display="block";
+  $("downloadBtn").href=url;
+  $("openDirect").href=url;
+  showStatus("Direct video link मिल गया।");
   return;
  }
 
- const host = url.hostname.toLowerCase();
+ const instagram=getInstagramInfo(url);
 
- // INSTAGRAM
+ if(instagram){
+  $("result").style.display="block";
+  $("platform").textContent="INSTAGRAM";
+  $("title").textContent="Instagram Preview";
+  $("previewArea").innerHTML="";
+  $("mainActions").innerHTML="";
 
- if(host === "instagram.com" || host.endsWith(".instagram.com")){
+  const frame=document.createElement("iframe");
+  frame.src=`https://www.instagram.com/${instagram.type}/${instagram.code}/embed/`;
+  frame.title="Instagram post preview";
+  frame.loading="lazy";
+  frame.allowFullscreen=true;
+  $("previewArea").appendChild(frame);
 
-  const instagram = getInstagramEmbed(url);
+  const open=document.createElement("a");
+  open.className="secondary";
+  open.href=url;
+  open.target="_blank";
+  open.rel="noopener";
+  open.textContent="Open Original Instagram Post";
+  $("mainActions").appendChild(open);
 
-  if(!instagram){
-   showMessage("Please enter a valid Instagram Reel or Post link.");
-   return;
+  showHelp(
+   "Instagram का आधिकारिक Download तरीका",
+   "हर Instagram पोस्ट डाउनलोड नहीं हो सकती। Reel पर Download विकल्प तभी मिलेगा जब creator ने इसकी अनुमति दी हो।",
+   [
+    "Instagram में Original Reel खोलें।",
+    "Share बटन दबाएँ।",
+    "अगर Download विकल्प दिखे, तो उसे चुनें।",
+    "अगर विकल्प नहीं दिखता, तो creator से अनुमति लें।"
+   ],
+   [{label:"Open Instagram",url:url}]
+  );
+
+  showStatus("Instagram Preview तैयार है।");
+  return;
+ }
+
+ if(isYouTube(url)){
+  $("result").style.display="block";
+  $("platform").textContent="YOUTUBE";
+  $("title").textContent="YouTube Video";
+  $("previewArea").innerHTML="";
+  $("mainActions").innerHTML="";
+
+  const open=document.createElement("a");
+  open.className="secondary";
+  open.href=url;
+  open.target="_blank";
+  open.rel="noopener";
+  open.textContent="Open Original YouTube Video";
+  $("mainActions").appendChild(open);
+
+  try{
+   const response=await fetch(
+    `${API_BASE}/api/video?url=${encodeURIComponent(url)}`
+   );
+   if(!response.ok)throw new Error("Metadata unavailable");
+
+   const data=await response.json();
+   if(data.title)$("title").textContent=data.title;
+
+   if(data.thumbnail){
+    const img=document.createElement("img");
+    img.className="preview";
+    img.src=data.thumbnail;
+    img.alt="YouTube thumbnail";
+    $("previewArea").appendChild(img);
+   }
+  }catch(e){
+   console.log("YouTube metadata unavailable",e);
   }
 
-  document.getElementById("videoTitle").textContent =
-   instagram.type === "p"
-    ? "Instagram Post Preview"
-    : "Instagram Reel Preview";
+  showHelp(
+   "YouTube का आधिकारिक Download तरीका",
+   "YouTube पर दूसरे लोगों के वीडियो को सामान्य MP4 फाइल की तरह डाउनलोड करने की अनुमति नहीं होती, जब तक YouTube स्वयं अनुमति न दे या आपके पास अधिकार न हों।",
+   [
+    "अपना अपलोड किया हुआ वीडियो डाउनलोड करने के लिए YouTube Studio खोलें।",
+    "Content में अपना वीडियो चुनें।",
+    "Menu में Download विकल्प चुनें।",
+    "YouTube Premium Offline Download ऐप के अंदर देखने के लिए है, MP4 export नहीं।"
+   ],
+   [
+    {label:"YouTube Studio",url:"https://studio.youtube.com/"},
+    {label:"YouTube Help",url:"https://support.google.com/youtube/answer/56100"}
+   ]
+  );
 
-  document.getElementById("videoAuthor").textContent =
-   "Instagram preview. Availability depends on the original post settings.";
-
-  const frame = document.getElementById("instagramFrame");
-
-  frame.src = instagram.embedUrl;
-  frame.style.display = "block";
-
-  const openLink = document.getElementById("openLink");
-
-  openLink.href = url.href;
-  openLink.textContent = "Open Original Instagram Post";
-
-  document.getElementById("preview").style.display = "block";
-
-  showMessage("Instagram link recognized. Loading preview...");
-
+  showStatus("YouTube link check हो गया।");
   return;
  }
 
- // DIRECT VIDEO FILE
-
- if(/\.(mp4|webm|mov|m4v)$/i.test(url.pathname)){
-
-  document.getElementById("videoTitle").textContent =
-   "Direct Video File";
-
-  document.getElementById("videoAuthor").textContent =
-   "Direct video link detected.";
-
-  const openLink = document.getElementById("openLink");
-
-  openLink.href = url.href;
-  openLink.textContent = "Open Video";
-
-  const downloadLink = document.getElementById("downloadLink");
-
-  downloadLink.href = url.href;
-  downloadLink.style.display = "block";
-
-  document.getElementById("preview").style.display = "block";
-
-  showMessage("Video detected. Download depends on source permissions.");
-
-  return;
- }
-
- // YOUTUBE
-
- const youtube =
-  host === "youtube.com" ||
-  host === "www.youtube.com" ||
-  host === "m.youtube.com" ||
-  host === "youtu.be" ||
-  host.endsWith(".youtube.com");
-
- if(!youtube){
-  showMessage("Please enter a YouTube, Instagram or direct video link.");
-  return;
- }
-
- button.disabled = true;
- button.textContent = "⏳ Loading...";
-
- showMessage("Getting video information...");
-
- try{
-
-  const apiUrl =
-   API_BASE + "/api/video?url=" + encodeURIComponent(url.href);
-
-  const response = await fetch(apiUrl);
-
-  const data = await response.json();
-
-  if(!response.ok){
-   throw new Error(data.error || "Could not get video information.");
-  }
-
-  document.getElementById("videoTitle").textContent =
-   data.title || "Video title unavailable";
-
-  document.getElementById("videoAuthor").textContent =
-   data.author ? "Channel: " + data.author : data.platform;
-
-  const openLink = document.getElementById("openLink");
-
-  openLink.href = data.videoUrl;
-  openLink.textContent = "Open Original Video";
-
-  const thumbnail = document.getElementById("thumbnail");
-
-  if(data.thumbnail){
-   thumbnail.src = data.thumbnail;
-   thumbnail.style.display = "block";
-  }
-
-  document.getElementById("preview").style.display = "block";
-
-  showMessage("Video information loaded successfully!");
-
- }catch(error){
-
-  showMessage(error.message || "Something went wrong.");
-
- }finally{
-
-  button.disabled = false;
-  button.textContent = "🔍 Check Video";
-
- }
-
+ showStatus("यह link supported platform या direct video file नहीं है।");
 }
 
+$("url").addEventListener("keydown",e=>{
+ if(e.key==="Enter")processLink();
+});
 </script>
-
 </body>
 </html>
