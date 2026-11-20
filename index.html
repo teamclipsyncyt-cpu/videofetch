@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<meta name="description" content="VideoFetch 2.0 - Find video information and preview supported video links.">
 <title>VideoFetch 2.0</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+ box-sizing:border-box;
+}
 
 :root{
  --bg:#080808;
@@ -34,17 +38,29 @@ body[data-theme="light"]{
  --shadow:#0002;
 }
 
+html{
+ min-height:100%;
+ scroll-behavior:smooth;
+}
+
 body{
  margin:0;
  min-height:100vh;
- padding:20px;
- font-family:Arial,sans-serif;
+ min-height:100dvh;
+ padding:24px 16px;
+ padding-top:max(24px, env(safe-area-inset-top));
+ padding-bottom:max(24px, env(safe-area-inset-bottom));
+ font-family:Arial, sans-serif;
  color:var(--text);
  background:var(--bg);
  display:flex;
  align-items:center;
  justify-content:center;
  transition:background .25s,color .25s;
+}
+
+button,input,a{
+ font-family:inherit;
 }
 
 .container{
@@ -54,7 +70,7 @@ body{
  color:var(--text);
  border:1px solid var(--border);
  border-radius:22px;
- padding:25px 24px;
+ padding:26px 24px;
  box-shadow:0 20px 60px var(--shadow);
  text-align:center;
  transition:background .25s,color .25s;
@@ -64,7 +80,7 @@ body{
  display:flex;
  align-items:center;
  justify-content:space-between;
- gap:10px;
+ gap:12px;
 }
 
 .logo{
@@ -77,17 +93,20 @@ body{
  font-size:11px;
  color:var(--muted);
  margin-top:6px;
+ letter-spacing:.5px;
 }
 
 .theme-btn{
  width:auto;
+ min-height:44px;
  margin:0;
- padding:10px 13px;
+ padding:10px 14px;
  border:1px solid var(--border);
  background:var(--soft);
  color:var(--text);
  border-radius:10px;
  font-size:13px;
+ white-space:nowrap;
 }
 
 .theme-btn:hover{
@@ -97,6 +116,7 @@ body{
 
 h1{
  font-size:26px;
+ line-height:1.25;
  margin:28px 0 8px;
 }
 
@@ -104,15 +124,17 @@ h1{
  color:var(--muted);
  line-height:1.6;
  font-size:14px;
+ margin:0;
 }
 
 input{
  width:100%;
- padding:16px;
+ min-height:52px;
+ padding:15px;
  margin-top:22px;
  border:1px solid var(--border);
  border-radius:11px;
- font-size:15px;
+ font-size:16px;
  outline:none;
  background:var(--input);
  color:var(--text);
@@ -124,7 +146,8 @@ input:focus{
 
 button{
  width:100%;
- padding:15px;
+ min-height:48px;
+ padding:14px 15px;
  margin-top:13px;
  background:var(--button);
  color:var(--button-text);
@@ -133,9 +156,12 @@ button{
  font-size:16px;
  font-weight:bold;
  cursor:pointer;
+ touch-action:manipulation;
 }
 
-button:hover{opacity:.85}
+button:hover{
+ opacity:.85;
+}
 
 button:disabled{
  opacity:.5;
@@ -149,6 +175,10 @@ button:disabled{
 }
 
 .platforms button{
+ flex:1;
+ min-width:0;
+ min-height:48px;
+ margin-top:0;
  background:var(--soft);
  color:var(--text);
  border:1px solid var(--border);
@@ -158,7 +188,7 @@ button:disabled{
 #message{
  margin-top:18px;
  font-size:14px;
- line-height:1.5;
+ line-height:1.6;
  color:var(--muted);
  overflow-wrap:anywhere;
 }
@@ -174,21 +204,26 @@ button:disabled{
 
 .preview img{
  width:100%;
+ height:auto;
  display:block;
 }
 
-.details{padding:15px}
+.details{
+ padding:16px;
+}
 
 .details h3{
  margin:0 0 8px;
  font-size:17px;
+ line-height:1.4;
  overflow-wrap:anywhere;
 }
 
 .details p{
  font-size:13px;
  color:var(--muted);
- line-height:1.5;
+ line-height:1.6;
+ overflow-wrap:anywhere;
 }
 
 .instagram-frame{
@@ -203,13 +238,15 @@ button:disabled{
  display:block;
  text-decoration:none;
  text-align:center;
- padding:13px;
+ padding:14px;
+ min-height:48px;
  background:var(--soft);
  color:var(--text);
  border:1px solid var(--border);
  border-radius:9px;
  font-weight:bold;
  margin-top:12px;
+ overflow-wrap:anywhere;
 }
 
 .download-link{
@@ -221,28 +258,169 @@ button:disabled{
 
 .info{
  margin-top:22px;
- padding:14px;
+ padding:15px;
  background:var(--soft);
  color:var(--muted);
  border-radius:10px;
  font-size:12px;
- line-height:1.7;
+ line-height:1.8;
  text-align:left;
+ overflow-wrap:anywhere;
+}
+
+.info strong{
+ color:var(--text);
 }
 
 footer{
  margin-top:22px;
  color:var(--muted);
  font-size:12px;
+ line-height:1.6;
 }
 
+/* TABLET */
+@media(min-width:481px) and (max-width:768px){
+ body{
+  padding:20px;
+ }
+
+ .container{
+  max-width:560px;
+ }
+}
+
+/* MOBILE */
 @media(max-width:480px){
- body{padding:12px}
- .container{padding:22px 16px}
- .logo{font-size:25px}
- h1{font-size:23px}
- .instagram-frame{height:600px}
- .theme-btn{font-size:12px;padding:9px}
+
+ body{
+  padding:12px;
+  padding-top:max(12px, env(safe-area-inset-top));
+  padding-bottom:max(12px, env(safe-area-inset-bottom));
+  align-items:flex-start;
+ }
+
+ .container{
+  width:100%;
+  padding:20px 15px;
+  border-radius:17px;
+  margin:auto 0;
+ }
+
+ .topbar{
+  gap:8px;
+ }
+
+ .logo{
+  font-size:25px;
+ }
+
+ .version{
+  font-size:9px;
+ }
+
+ .theme-btn{
+  font-size:12px;
+  min-height:42px;
+  padding:9px 10px;
+ }
+
+ h1{
+  font-size:23px;
+  margin-top:25px;
+ }
+
+ .subtitle{
+  font-size:13px;
+ }
+
+ input{
+  min-height:52px;
+  font-size:16px;
+  padding:14px;
+ }
+
+ button{
+  min-height:48px;
+  font-size:15px;
+ }
+
+ .platforms{
+  gap:8px;
+ }
+
+ .platforms button{
+  font-size:13px;
+  padding:12px 8px;
+ }
+
+ #message{
+  font-size:13px;
+ }
+
+ .instagram-frame{
+  height:560px;
+ }
+
+ .details{
+  padding:13px;
+ }
+
+ .details h3{
+  font-size:16px;
+ }
+
+ .info{
+  font-size:11px;
+  padding:13px;
+ }
+
+ footer{
+  font-size:11px;
+ }
+}
+
+/* VERY SMALL MOBILE */
+@media(max-width:350px){
+
+ .container{
+  padding:17px 11px;
+ }
+
+ .logo{
+  font-size:22px;
+ }
+
+ .theme-btn{
+  font-size:11px;
+  padding:8px;
+ }
+
+ h1{
+  font-size:21px;
+ }
+
+ .instagram-frame{
+  height:500px;
+ }
+}
+
+/* KEYBOARD ACCESSIBILITY */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible{
+ outline:2px solid var(--muted);
+ outline-offset:3px;
+}
+
+/* REDUCE ANIMATIONS IF REQUESTED BY DEVICE */
+@media(prefers-reduced-motion:reduce){
+ *,
+ *::before,
+ *::after{
+  scroll-behavior:auto !important;
+  transition:none !important;
+ }
 }
 </style>
 </head>
@@ -252,6 +430,7 @@ footer{
 <div class="container">
 
  <div class="topbar">
+
   <div style="text-align:left">
    <div class="logo">VideoFetch</div>
    <div class="version">VERSION 2.0 • ADVANCED</div>
@@ -263,6 +442,7 @@ footer{
    onclick="toggleTheme()">
    ☀️ Light Mode
   </button>
+
  </div>
 
  <h1>Video Information Finder</h1>
@@ -274,7 +454,9 @@ footer{
  <input
   id="videoUrl"
   type="url"
-  placeholder="Paste your video link here...">
+  placeholder="Paste your video link here..."
+  autocomplete="url"
+  aria-label="Video link">
 
  <button id="checkButton" onclick="checkVideo()">
   Check Video
@@ -399,7 +581,10 @@ function resetPreview(){
 
  document.getElementById("preview").style.display = "none";
 
- document.getElementById("thumbnail").style.display = "none";
+ const thumbnail = document.getElementById("thumbnail");
+
+ thumbnail.style.display = "none";
+ thumbnail.removeAttribute("src");
 
  document.getElementById("instagramFrame").style.display = "none";
 
@@ -407,6 +592,8 @@ function resetPreview(){
 
  document.getElementById("downloadLink").style.display = "none";
 }
+
+// MESSAGE
 
 function showMessage(text){
  document.getElementById("message").textContent = text;
