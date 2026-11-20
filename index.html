@@ -4,25 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080808">
-<meta name="description" content="VideoFetch 2.0 - Find video information and preview supported video links.">
-<title>VideoFetch 2.0</title>
+<meta name="description" content="VideoFetch 3.0 - Video Information Finder">
+<title>VideoFetch 3.0</title>
 
 <style>
-*{
- box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 :root{
  --bg:#080808;
- --card:#151515;
+ --card:#111111;
  --text:#ffffff;
- --muted:#aaaaaa;
- --border:#333333;
- --input:#202020;
- --soft:#242424;
+ --muted:#999999;
+ --border:#292929;
+ --input:#191919;
+ --soft:#1c1c1c;
  --button:#ffffff;
- --button-text:#111111;
- --shadow:#0008;
+ --button-text:#080808;
+ --accent:#bdbdbd;
+ --shadow:#0009;
 }
 
 body[data-theme="light"]{
@@ -32,48 +31,40 @@ body[data-theme="light"]{
  --muted:#666666;
  --border:#dddddd;
  --input:#f7f7f7;
- --soft:#f0f0f0;
+ --soft:#f1f1f1;
  --button:#111111;
  --button-text:#ffffff;
+ --accent:#444444;
  --shadow:#0002;
 }
 
-html{
- min-height:100%;
- scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
  margin:0;
  min-height:100vh;
  min-height:100dvh;
- padding:24px 16px;
- padding-top:max(24px, env(safe-area-inset-top));
- padding-bottom:max(24px, env(safe-area-inset-bottom));
- font-family:Arial, sans-serif;
+ padding:25px 15px;
+ font-family:Arial,sans-serif;
  color:var(--text);
- background:var(--bg);
+ background:
+ radial-gradient(ellipse at top, #33333333, transparent 55%),
+ var(--bg);
  display:flex;
  align-items:center;
  justify-content:center;
- transition:background .25s,color .25s;
-}
-
-button,input,a{
- font-family:inherit;
+ transition:.25s;
 }
 
 .container{
  width:100%;
- max-width:600px;
- background:var(--card);
- color:var(--text);
+ max-width:620px;
+ padding:28px;
  border:1px solid var(--border);
- border-radius:22px;
- padding:26px 24px;
- box-shadow:0 20px 60px var(--shadow);
+ border-radius:24px;
+ background:var(--card);
+ box-shadow:0 25px 70px var(--shadow);
  text-align:center;
- transition:background .25s,color .25s;
 }
 
 .topbar{
@@ -83,89 +74,132 @@ button,input,a{
  gap:12px;
 }
 
+.brand{
+ display:flex;
+ align-items:center;
+ gap:11px;
+ text-align:left;
+}
+
+.logo-icon{
+ width:44px;
+ height:44px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:13px;
+ background:var(--button);
+ color:var(--button-text);
+ font-size:21px;
+ font-weight:900;
+}
+
 .logo{
- font-size:30px;
- font-weight:800;
+ font-size:25px;
+ font-weight:900;
  letter-spacing:-1px;
 }
 
 .version{
- font-size:11px;
+ margin-top:5px;
  color:var(--muted);
- margin-top:6px;
- letter-spacing:.5px;
+ font-size:9px;
+ letter-spacing:1.5px;
 }
 
 .theme-btn{
  width:auto;
- min-height:44px;
+ min-height:42px;
  margin:0;
- padding:10px 14px;
- border:1px solid var(--border);
+ padding:10px 13px;
  background:var(--soft);
  color:var(--text);
+ border:1px solid var(--border);
  border-radius:10px;
- font-size:13px;
- white-space:nowrap;
+ font-size:12px;
+ font-weight:bold;
 }
 
-.theme-btn:hover{
- opacity:.8;
- background:var(--soft);
+.hero{
+ margin-top:38px;
+}
+
+.tag{
+ display:inline-block;
+ padding:7px 13px;
+ border:1px solid var(--border);
+ border-radius:30px;
+ color:var(--muted);
+ font-size:11px;
+ letter-spacing:1px;
 }
 
 h1{
- font-size:26px;
- line-height:1.25;
- margin:28px 0 8px;
+ margin:17px 0 10px;
+ font-size:32px;
+ letter-spacing:-1px;
+ line-height:1.2;
 }
 
 .subtitle{
+ max-width:430px;
+ margin:0 auto;
  color:var(--muted);
- line-height:1.6;
  font-size:14px;
- margin:0;
+ line-height:1.7;
+}
+
+.input-area{
+ margin-top:28px;
+ padding:7px;
+ background:var(--input);
+ border:1px solid var(--border);
+ border-radius:14px;
 }
 
 input{
  width:100%;
- min-height:52px;
- padding:15px;
- margin-top:22px;
- border:1px solid var(--border);
- border-radius:11px;
- font-size:16px;
+ min-height:51px;
+ padding:14px;
+ border:0;
  outline:none;
- background:var(--input);
+ border-radius:10px;
+ background:transparent;
  color:var(--text);
+ font-size:16px;
 }
 
+input::placeholder{color:var(--muted)}
+
 input:focus{
- border-color:var(--muted);
+ outline:1px solid var(--accent);
 }
 
 button{
  width:100%;
- min-height:48px;
- padding:14px 15px;
- margin-top:13px;
- background:var(--button);
- color:var(--button-text);
+ min-height:49px;
+ margin-top:12px;
+ padding:14px;
  border:0;
  border-radius:11px;
- font-size:16px;
+ background:var(--button);
+ color:var(--button-text);
+ font-size:15px;
  font-weight:bold;
  cursor:pointer;
+ transition:transform .2s,opacity .2s;
  touch-action:manipulation;
 }
 
 button:hover{
- opacity:.85;
+ opacity:.86;
+ transform:translateY(-1px);
 }
 
 button:disabled{
- opacity:.5;
- cursor:not-allowed;
+ opacity:.55;
+ cursor:wait;
+ transform:none;
 }
 
 .platforms{
@@ -176,54 +210,45 @@ button:disabled{
 
 .platforms button{
  flex:1;
- min-width:0;
- min-height:48px;
  margin-top:0;
  background:var(--soft);
  color:var(--text);
  border:1px solid var(--border);
- font-size:14px;
+}
+
+.platforms button:hover{
+ background:var(--border);
 }
 
 #message{
  margin-top:18px;
- font-size:14px;
- line-height:1.6;
+ min-height:20px;
  color:var(--muted);
+ font-size:13px;
+ line-height:1.6;
  overflow-wrap:anywhere;
 }
 
 .preview{
  display:none;
- margin-top:20px;
+ margin-top:23px;
  text-align:left;
  border:1px solid var(--border);
- border-radius:14px;
+ border-radius:16px;
  overflow:hidden;
+ background:var(--soft);
+ animation:appear .35s ease;
+}
+
+@keyframes appear{
+ from{opacity:0;transform:translateY(10px)}
+ to{opacity:1;transform:translateY(0)}
 }
 
 .preview img{
  width:100%;
  height:auto;
  display:block;
-}
-
-.details{
- padding:16px;
-}
-
-.details h3{
- margin:0 0 8px;
- font-size:17px;
- line-height:1.4;
- overflow-wrap:anywhere;
-}
-
-.details p{
- font-size:13px;
- color:var(--muted);
- line-height:1.6;
- overflow-wrap:anywhere;
 }
 
 .instagram-frame{
@@ -234,19 +259,41 @@ button:disabled{
  background:var(--soft);
 }
 
+.details{
+ padding:17px;
+}
+
+.details h3{
+ margin:0 0 8px;
+ font-size:18px;
+ line-height:1.4;
+ overflow-wrap:anywhere;
+}
+
+.details p{
+ color:var(--muted);
+ font-size:13px;
+ line-height:1.6;
+ overflow-wrap:anywhere;
+}
+
 .open-link,.download-link{
  display:block;
- text-decoration:none;
- text-align:center;
+ margin-top:12px;
  padding:14px;
- min-height:48px;
- background:var(--soft);
+ border-radius:10px;
+ text-align:center;
+ text-decoration:none;
+ font-size:14px;
+ font-weight:bold;
+ background:var(--card);
  color:var(--text);
  border:1px solid var(--border);
- border-radius:9px;
- font-weight:bold;
- margin-top:12px;
  overflow-wrap:anywhere;
+}
+
+.open-link:hover{
+ opacity:.8;
 }
 
 .download-link{
@@ -257,169 +304,77 @@ button:disabled{
 }
 
 .info{
- margin-top:22px;
- padding:15px;
+ margin-top:25px;
+ padding:17px;
+ border:1px solid var(--border);
+ border-radius:13px;
  background:var(--soft);
- color:var(--muted);
- border-radius:10px;
- font-size:12px;
- line-height:1.8;
  text-align:left;
- overflow-wrap:anywhere;
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.9;
 }
 
 .info strong{
  color:var(--text);
+ font-size:13px;
+}
+
+.info-title{
+ margin-bottom:7px;
 }
 
 footer{
- margin-top:22px;
+ margin-top:25px;
  color:var(--muted);
- font-size:12px;
- line-height:1.6;
+ font-size:11px;
+ line-height:1.7;
 }
 
-/* TABLET */
-@media(min-width:481px) and (max-width:768px){
- body{
-  padding:20px;
- }
-
- .container{
-  max-width:560px;
- }
+button:focus-visible,
+a:focus-visible,
+input:focus-visible{
+ outline:2px solid var(--accent);
+ outline-offset:3px;
 }
 
-/* MOBILE */
 @media(max-width:480px){
-
  body{
   padding:12px;
-  padding-top:max(12px, env(safe-area-inset-top));
-  padding-bottom:max(12px, env(safe-area-inset-bottom));
   align-items:flex-start;
  }
 
  .container{
-  width:100%;
   padding:20px 15px;
-  border-radius:17px;
+  border-radius:19px;
   margin:auto 0;
  }
 
- .topbar{
-  gap:8px;
- }
-
- .logo{
-  font-size:25px;
- }
-
- .version{
-  font-size:9px;
- }
-
- .theme-btn{
-  font-size:12px;
-  min-height:42px;
-  padding:9px 10px;
- }
-
- h1{
-  font-size:23px;
-  margin-top:25px;
- }
-
- .subtitle{
-  font-size:13px;
- }
-
- input{
-  min-height:52px;
-  font-size:16px;
-  padding:14px;
- }
-
- button{
-  min-height:48px;
-  font-size:15px;
- }
-
- .platforms{
-  gap:8px;
- }
-
- .platforms button{
-  font-size:13px;
-  padding:12px 8px;
- }
-
- #message{
-  font-size:13px;
- }
-
- .instagram-frame{
-  height:560px;
- }
-
- .details{
-  padding:13px;
- }
-
- .details h3{
-  font-size:16px;
- }
-
- .info{
-  font-size:11px;
-  padding:13px;
- }
-
- footer{
-  font-size:11px;
- }
+ .logo{font-size:22px}
+ .logo-icon{width:40px;height:40px}
+ .version{font-size:8px}
+ .theme-btn{font-size:11px;padding:9px}
+ .hero{margin-top:30px}
+ h1{font-size:26px}
+ .subtitle{font-size:13px}
+ .instagram-frame{height:560px}
+ .details{padding:14px}
+ .info{padding:14px}
 }
 
-/* VERY SMALL MOBILE */
 @media(max-width:350px){
-
- .container{
-  padding:17px 11px;
- }
-
- .logo{
-  font-size:22px;
- }
-
- .theme-btn{
-  font-size:11px;
-  padding:8px;
- }
-
- h1{
-  font-size:21px;
- }
-
- .instagram-frame{
-  height:500px;
- }
+ .container{padding:16px 11px}
+ .logo{font-size:19px}
+ .logo-icon{width:35px;height:35px}
+ .theme-btn{font-size:10px;padding:8px}
+ h1{font-size:23px}
+ .instagram-frame{height:500px}
 }
 
-/* KEYBOARD ACCESSIBILITY */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible{
- outline:2px solid var(--muted);
- outline-offset:3px;
-}
-
-/* REDUCE ANIMATIONS IF REQUESTED BY DEVICE */
 @media(prefers-reduced-motion:reduce){
- *,
- *::before,
- *::after{
-  scroll-behavior:auto !important;
-  transition:none !important;
+ *,*::before,*::after{
+  animation:none!important;
+  transition:none!important;
  }
 }
 </style>
@@ -431,40 +386,47 @@ input:focus-visible{
 
  <div class="topbar">
 
-  <div style="text-align:left">
-   <div class="logo">VideoFetch</div>
-   <div class="version">VERSION 2.0 • ADVANCED</div>
+  <div class="brand">
+   <div class="logo-icon">V</div>
+   <div>
+    <div class="logo">VideoFetch</div>
+    <div class="version">VERSION 3.0 • PROFESSIONAL</div>
+   </div>
   </div>
 
-  <button
-   class="theme-btn"
-   id="themeButton"
-   onclick="toggleTheme()">
+  <button class="theme-btn" id="themeButton" onclick="toggleTheme()">
    ☀️ Light Mode
   </button>
 
  </div>
 
- <h1>Video Information Finder</h1>
+ <div class="hero">
+  <span class="tag">VIDEO TOOL • 3.0</span>
 
- <p class="subtitle">
-  Paste a YouTube or Instagram link to check available video information.
- </p>
+  <h1>Video Information Finder</h1>
 
- <input
-  id="videoUrl"
-  type="url"
-  placeholder="Paste your video link here..."
-  autocomplete="url"
-  aria-label="Video link">
+  <p class="subtitle">
+   Paste your video link and explore available video information
+   with a clean and simple experience.
+  </p>
+ </div>
+
+ <div class="input-area">
+  <input
+   id="videoUrl"
+   type="url"
+   placeholder="Paste your video link here..."
+   autocomplete="url"
+   aria-label="Video link">
+ </div>
 
  <button id="checkButton" onclick="checkVideo()">
-  Check Video
+  🔍 Check Video
  </button>
 
  <div class="platforms">
-  <button onclick="openPlatform('youtube')">YouTube</button>
-  <button onclick="openPlatform('instagram')">Instagram</button>
+  <button onclick="openPlatform('youtube')">▶ YouTube</button>
+  <button onclick="openPlatform('instagram')">◎ Instagram</button>
  </div>
 
  <div id="message" role="status" aria-live="polite"></div>
@@ -507,7 +469,7 @@ input:focus-visible{
  </div>
 
  <div class="info">
-  <strong>About VideoFetch</strong><br>
+  <div class="info-title"><strong>About VideoFetch</strong></div>
   YouTube: Title and thumbnail where available.<br>
   Instagram: Embedded preview where available.<br>
   Direct video files: Download only when the source permits it.<br>
@@ -587,7 +549,6 @@ function resetPreview(){
  thumbnail.removeAttribute("src");
 
  document.getElementById("instagramFrame").style.display = "none";
-
  document.getElementById("instagramFrame").src = "about:blank";
 
  document.getElementById("downloadLink").style.display = "none";
@@ -714,9 +675,7 @@ async function checkVideo(){
 
   document.getElementById("preview").style.display = "block";
 
-  showMessage(
-   "Video detected. Download depends on source permissions."
-  );
+  showMessage("Video detected. Download depends on source permissions.");
 
   return;
  }
@@ -736,7 +695,7 @@ async function checkVideo(){
  }
 
  button.disabled = true;
- button.textContent = "Loading...";
+ button.textContent = "⏳ Loading...";
 
  showMessage("Getting video information...");
 
@@ -782,12 +741,13 @@ async function checkVideo(){
  }finally{
 
   button.disabled = false;
-  button.textContent = "Check Video";
+  button.textContent = "🔍 Check Video";
 
  }
 
 }
 
 </script>
+
 </body>
 </html>
