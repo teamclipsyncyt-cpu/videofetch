@@ -3,673 +3,605 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VideoFetch - Smart SEO Generator 3.0</title>
-<meta name="description" content="Analyze YouTube video details, SEO score, keywords, tags, hashtags and title suggestions with VideoFetch.">
+<title>VideoFetch - Smart SEO Analyzer 4.0</title>
+<meta name="description" content="Analyze YouTube video SEO, keywords, tags, hashtags and title suggestions with VideoFetch.">
 <style>
 :root{
-  --bg:#f4f6fb;--card:#fff;--text:#172033;--muted:#687386;
-  --border:#e4e8f0;--primary:#635bff;--soft:#eeedff;
-  --green:#16a36a;--red:#e34d59;--shadow:0 8px 28px #1720330d;
+--bg:#f4f6fb;--card:#fff;--text:#172033;--muted:#687386;
+--border:#e4e8f0;--primary:#635bff;--soft:#eeedff;
+--green:#16a36a;--red:#e34d59;--shadow:0 8px 28px #1720330d
 }
 body.dark{
-  --bg:#10131d;--card:#191e2b;--text:#f2f4fa;--muted:#a5aec0;
-  --border:#303849;--primary:#918bff;--soft:#292746;
-  --shadow:0 8px 28px #0003;
+--bg:#10131d;--card:#191e2b;--text:#f2f4fa;--muted:#a5aec0;
+--border:#303849;--primary:#918bff;--soft:#292746;
+--shadow:0 8px 28px #0003
 }
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;transition:.2s;
-}
-header{
-  padding:17px 5%;display:flex;align-items:center;
-  justify-content:space-between;background:var(--card);
-  border-bottom:1px solid var(--border);gap:12px;
-}
-.logo{font-size:24px;font-weight:800;letter-spacing:-1px}
-.logo span{color:var(--primary)}
-.header-actions{display:flex;gap:9px;align-items:center}
-button{
-  border:0;border-radius:10px;padding:11px 15px;
-  font-weight:700;cursor:pointer;font-size:13px;
-}
-.theme-btn,.secondary{background:var(--soft);color:var(--text)}
-.primary{background:var(--primary);color:white}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{padding:17px 5%;display:flex;justify-content:space-between;align-items:center;background:var(--card);border-bottom:1px solid var(--border)}
+.logo{font-size:24px;font-weight:800}.logo span{color:var(--primary)}
+button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer;font-size:13px}
 button:disabled{opacity:.5;cursor:not-allowed}
+.primary{background:var(--primary);color:white}
+.secondary,.theme-btn{background:var(--soft);color:var(--text)}
 .container{max-width:1050px;margin:30px auto;padding:0 16px}
 .hero{text-align:center;margin-bottom:25px}
 .hero h1{font-size:clamp(27px,5vw,40px);margin:8px 0}
-.hero p{color:var(--muted);line-height:1.6;margin:8px 0}
-.search-card,.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:17px;padding:20px;margin-bottom:17px;
-  box-shadow:var(--shadow);
-}
+.hero p{color:var(--muted);line-height:1.6}
+.search-card,.card{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:20px;margin-bottom:17px;box-shadow:var(--shadow)}
 .search-row{display:flex;gap:10px}
-input{
-  width:100%;min-width:0;padding:15px;border-radius:10px;
-  border:1px solid var(--border);background:var(--bg);
-  color:var(--text);font-size:15px;outline:none;
-}
-input:focus{border-color:var(--primary)}
+input{width:100%;min-width:0;padding:15px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:15px;outline:none}
 .search-row button{min-width:115px}
 .status{margin-top:12px;color:var(--muted);font-size:13px}
-.error{color:var(--red)}
-.success{color:var(--green)}
+.error{color:var(--red)}.success{color:var(--green)}
 .hidden{display:none!important}
-.section-title{
-  font-size:19px;font-weight:800;margin:0 0 16px;
-  display:flex;align-items:center;gap:8px;
-}
+.section-title{font-size:19px;font-weight:800;margin:0 0 16px}
 .video-layout{display:grid;grid-template-columns:300px 1fr;gap:20px}
-.thumbnail{width:100%;border-radius:12px;display:block;aspect-ratio:16/9;object-fit:cover;background:var(--bg)}
-.video-title{font-size:19px;font-weight:800;line-height:1.4;margin:0 0 12px}
-.channel{color:var(--muted);margin-bottom:14px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.thumbnail{width:100%;border-radius:12px;aspect-ratio:16/9;object-fit:cover;background:var(--bg)}
+.video-title{font-size:19px;line-height:1.4;margin:0 0 12px}
+.channel,.meta{color:var(--muted);font-size:13px;line-height:1.8}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
 .stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}
 .stat strong{display:block;font-size:17px;margin-bottom:5px}
 .stat small{color:var(--muted)}
-.meta{color:var(--muted);font-size:13px;line-height:1.8;margin-top:12px}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .score-layout{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center}
-.score-circle{
-  width:135px;height:135px;border-radius:50%;
-  display:grid;place-items:center;
-  background:conic-gradient(var(--green) var(--score,0%),var(--border) 0);
-  position:relative;margin:auto;
-}
-.score-circle:before{
-  content:"";position:absolute;width:105px;height:105px;
-  border-radius:50%;background:var(--card);
-}
+.score-circle{width:135px;height:135px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) var(--score,0%),var(--border) 0);position:relative;margin:auto}
+.score-circle:before{content:"";position:absolute;width:105px;height:105px;border-radius:50%;background:var(--card)}
 .score-number{z-index:1;text-align:center;font-size:28px;font-weight:800}
 .score-number small{display:block;font-size:11px;color:var(--muted)}
 .progress-row{margin:12px 0}
 .progress-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
 .progress{height:8px;border-radius:20px;background:var(--border);overflow:hidden}
-.progress div{height:100%;background:var(--primary);border-radius:20px}
+.progress div{height:100%;background:var(--primary)}
 .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.content-text{
-  white-space:pre-wrap;overflow-wrap:anywhere;
-  line-height:1.6;color:var(--muted);font-size:13px;
-  max-height:180px;overflow:auto;background:var(--bg);
-  border:1px solid var(--border);border-radius:10px;padding:12px;
-}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.chip{
-  display:inline-flex;align-items:center;gap:5px;
-  background:var(--soft);color:var(--text);
-  border:1px solid var(--border);padding:8px 11px;
-  border-radius:9px;font-size:13px;overflow-wrap:anywhere;
-}
+.content-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;color:var(--muted);font-size:13px;max-height:180px;overflow:auto;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.chip{display:inline-flex;background:var(--soft);color:var(--text);border:1px solid var(--border);padding:8px 11px;border-radius:9px;font-size:13px;overflow-wrap:anywhere}
 .keyword-list{display:flex;flex-direction:column;gap:10px}
 .keyword-item{display:flex;justify-content:space-between;gap:12px;font-size:13px}
 .keyword-item span:first-child{overflow-wrap:anywhere}
-.title-item{
-  background:var(--bg);border:1px solid var(--border);
-  padding:13px;border-radius:10px;margin:9px 0;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-}
+.title-item{background:var(--bg);border:1px solid var(--border);padding:13px;border-radius:10px;margin:9px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .title-item p{margin:0;line-height:1.5;font-size:14px;overflow-wrap:anywhere}
 .title-item button{flex-shrink:0}
-.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .small{font-size:11px;color:var(--muted);line-height:1.6}
-.label{font-size:12px;color:var(--muted);font-weight:700}
 footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
 iframe{width:100%;height:450px;border:0;border-radius:12px}
 video{width:100%;border-radius:12px;background:#000}
 @media(max-width:700px){
-  .video-layout,.grid-two{grid-template-columns:1fr}
-  .video-layout .thumbnail{max-width:100%}
-  .score-layout{grid-template-columns:1fr}
-  .search-row{flex-direction:column}
-  .search-row button{width:100%}
-  header{padding:14px 4%}
-  .logo{font-size:20px}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .title-item{align-items:flex-start}
+.video-layout,.grid-two{grid-template-columns:1fr}
+.score-layout{grid-template-columns:1fr}
+.search-row{flex-direction:column}
+.search-row button{width:100%}
+header{padding:14px 4%}
+.logo{font-size:20px}
+.stats{grid-template-columns:repeat(2,1fr)}
+.title-item{align-items:flex-start}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Video<span>Fetch</span> <small style="font-size:11px;color:var(--muted)">3.0</small></div>
-  <div class="header-actions">
-    <button class="theme-btn" onclick="toggleTheme()">🌙 Theme</button>
-  </div>
+<div class="logo">Video<span>Fetch</span> <small style="font-size:11px;color:var(--muted)">4.0</small></div>
+<button class="theme-btn" onclick="toggleTheme()">🌙 Theme</button>
 </header>
 
 <main class="container">
-  <section class="hero">
-    <h1>Smart YouTube SEO Analyzer</h1>
-    <p>Video Details, SEO Score, Keywords, Tags और Hashtags एक ही जगह।</p>
-  </section>
+<section class="hero">
+<h1>Smart YouTube SEO Analyzer</h1>
+<p>Video Details, SEO Score, Keywords, Tags और Hashtags एक ही जगह।</p>
+</section>
 
-  <section class="search-card">
-    <div class="search-row">
-      <input id="videoUrl" type="text" placeholder="Paste YouTube / Instagram / Direct video URL">
-      <button class="primary" id="analyzeBtn" onclick="analyzeVideo()">Analyze Video</button>
-    </div>
-    <div id="status" class="status">YouTube वीडियो का लिंक डालकर Analyze Video पर क्लिक करें।</div>
-  </section>
+<section class="search-card">
+<div class="search-row">
+<input id="videoUrl" placeholder="Paste YouTube / Instagram / Direct video URL">
+<button class="primary" id="analyzeBtn" onclick="analyzeVideo()">Analyze Video</button>
+</div>
+<div id="status" class="status">YouTube वीडियो का लिंक डालकर Analyze Video पर क्लिक करें।</div>
+</section>
 
-  <section id="results" class="hidden">
+<section id="results" class="hidden">
 
-    <div class="card">
-      <h2 class="section-title">🎬 Video Details</h2>
-      <div class="video-layout">
-        <div>
-          <img id="thumbnail" class="thumbnail" alt="Video thumbnail">
-        </div>
-        <div>
-          <h3 id="videoTitle" class="video-title"></h3>
-          <div id="channelName" class="channel"></div>
-          <div class="stats">
-            <div class="stat"><strong id="views">-</strong><small>Views</small></div>
-            <div class="stat"><strong id="likes">-</strong><small>Likes</small></div>
-            <div class="stat"><strong id="comments">-</strong><small>Comments</small></div>
-          </div>
-          <div id="videoMeta" class="meta"></div>
-          <div class="action-row">
-            <button class="secondary" onclick="copyValue(videoTitleText,'Title')">Copy Title</button>
-            <button class="secondary" onclick="openOriginal()">Open Original Video</button>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="card">
+<h2 class="section-title">🎬 Video Details</h2>
+<div class="video-layout">
+<div><img id="thumbnail" class="thumbnail" alt="Video thumbnail"></div>
+<div>
+<h3 id="videoTitle" class="video-title"></h3>
+<div id="channelName" class="channel"></div>
+<div class="stats">
+<div class="stat"><strong id="views">-</strong><small>Views</small></div>
+<div class="stat"><strong id="likes">-</strong><small>Likes</small></div>
+<div class="stat"><strong id="comments">-</strong><small>Comments</small></div>
+</div>
+<div id="videoMeta" class="meta"></div>
+<div class="action-row">
+<button class="secondary" onclick="copyValue(videoTitleText,'Title')">Copy Title</button>
+<button class="secondary" onclick="openOriginal()">Open Original Video</button>
+</div>
+</div>
+</div>
+</div>
 
-    <div class="card">
-      <h2 class="section-title">📊 SEO Score</h2>
-      <div class="score-layout">
-        <div class="score-circle" id="scoreCircle">
-          <div class="score-number"><span id="scoreValue">0</span><small>/100</small></div>
-        </div>
-        <div>
-          <div id="scoreBreakdown"></div>
-          <p class="small">यह VideoFetch का अनुमानित SEO Score है, YouTube का आधिकारिक Ranking Score नहीं। जिन जानकारियों को API से प्राप्त नहीं किया जा सका, उन्हें स्कोर में शामिल नहीं किया गया है।</p>
-        </div>
-      </div>
-    </div>
+<div class="card">
+<h2 class="section-title">📊 SEO Score</h2>
+<div class="score-layout">
+<div class="score-circle" id="scoreCircle"><div class="score-number"><span id="scoreValue">0</span><small>/100</small></div></div>
+<div>
+<div id="scoreBreakdown"></div>
+<p class="small">यह VideoFetch का अनुमानित SEO Score है, YouTube का आधिकारिक Ranking Score नहीं। उपलब्ध न होने वाले डेटा को स्कोर से बाहर रखा जाता है।</p>
+</div>
+</div>
+</div>
 
-    <div class="grid-two">
-      <div class="card">
-        <h2 class="section-title">📝 Description Analysis</h2>
-        <div id="descriptionStats" class="meta"></div>
-        <div id="descriptionText" class="content-text"></div>
-        <div class="action-row">
-          <button class="secondary" onclick="copyValue(videoDescription,'Description')">Copy Description</button>
-        </div>
-      </div>
+<div class="grid-two">
+<div class="card">
+<h2 class="section-title">📝 Description Analysis</h2>
+<div id="descriptionStats" class="meta"></div>
+<div id="descriptionText" class="content-text"></div>
+<button class="secondary" onclick="copyValue(videoDescription,'Description')">Copy Description</button>
+</div>
+<div class="card">
+<h2 class="section-title">#️⃣ Original Hashtags</h2>
+<div id="originalHashtags" class="chips"></div>
+<p class="small">Description से मिले Original Hashtags।</p>
+<button class="secondary" onclick="copyArray(originalHashtagList,'Original Hashtags')">Copy Hashtags</button>
+</div>
+</div>
 
-      <div class="card">
-        <h2 class="section-title">#️⃣ Original Hashtags</h2>
-        <div id="originalHashtags" class="chips"></div>
-        <p class="small">ये Hashtags वीडियो की Description से निकाले गए हैं।</p>
-        <button class="secondary" onclick="copyArray(originalHashtagList,'Original Hashtags')">Copy Hashtags</button>
-      </div>
-    </div>
+<div class="card">
+<h2 class="section-title">🏷️ Original YouTube Tags</h2>
+<div id="originalTags" class="chips"></div>
+<div id="originalTagsNote" class="small"></div>
+<button class="secondary" onclick="copyArray(originalTagList,'Original Tags')">Copy Original Tags</button>
+</div>
 
-    <div class="card">
-      <h2 class="section-title">🏷️ Original YouTube Tags</h2>
-      <div id="originalTags" class="chips"></div>
-      <div id="originalTagsNote" class="small"></div>
-      <div class="action-row">
-        <button class="secondary" onclick="copyArray(originalTagList,'Original Tags')">Copy Original Tags</button>
-      </div>
-    </div>
+<div class="card">
+<h2 class="section-title">✨ Smart Suggested Tags</h2>
+<p class="small">वीडियो के विषय से संबंधित नए Tag Suggestions। ये Original YouTube Tags नहीं हैं।</p>
+<div id="suggestedTags" class="chips"></div>
+<div class="action-row">
+<button class="primary" onclick="copyArray(suggestedTagList,'Suggested Tags',true)">Copy Suggested Tags</button>
+<button class="secondary" onclick="copyArray(suggestedTagList,'Suggested Tags')">Copy Tags Line</button>
+</div>
+</div>
 
-    <div class="card">
-      <h2 class="section-title">✨ Smart Suggested Tags</h2>
-      <p class="small">Title और Description से संबंधित उपयोगी Tag Suggestions। ये YouTube के Original Tags नहीं हैं।</p>
-      <div id="suggestedTags" class="chips"></div>
-      <div class="action-row">
-        <button class="primary" onclick="copyArray(suggestedTagList,'Suggested Tags')">Copy Suggested Tags</button>
-        <button class="secondary" onclick="copyArray(suggestedTagList,'Suggested Tags',true)">Copy Tags Line</button>
-      </div>
-    </div>
+<div class="card">
+<h2 class="section-title">#️⃣ Smart Hashtag Generator</h2>
+<div id="suggestedHashtags" class="chips"></div>
+<button class="primary" onclick="copyArray(suggestedHashtagList,'Suggested Hashtags',true)">Copy Suggested Hashtags</button>
+</div>
 
-    <div class="card">
-      <h2 class="section-title">#️⃣ Smart Hashtag Generator</h2>
-      <div id="suggestedHashtags" class="chips"></div>
-      <button class="primary" onclick="copyArray(suggestedHashtagList,'Suggested Hashtags')">Copy Suggested Hashtags</button>
-    </div>
+<div class="grid-two">
+<div class="card">
+<h2 class="section-title">🔍 Keyword Analysis</h2>
+<div id="keywordList" class="keyword-list"></div>
+<button class="secondary" onclick="copyArray(keywordList,'Keywords',true)">Copy Keywords</button>
+</div>
+<div class="card">
+<h2 class="section-title">📈 Engagement Analysis</h2>
+<div id="engagementStats" class="meta"></div>
+</div>
+</div>
 
-    <div class="grid-two">
-      <div class="card">
-        <h2 class="section-title">🔍 Keyword Analysis</h2>
-        <div id="keywordList" class="keyword-list"></div>
-        <div class="action-row">
-          <button class="secondary" onclick="copyArray(keywordList,'Keywords')">Copy Keywords</button>
-        </div>
-      </div>
-      <div class="card">
-        <h2 class="section-title">📈 Engagement Analysis</h2>
-        <div id="engagementStats" class="meta"></div>
-      </div>
-    </div>
+<div class="card">
+<h2 class="section-title">🚀 SEO Title Suggestions</h2>
+<p class="small">Original वीडियो के मुख्य विषय पर आधारित पाँच अलग-अलग Title Suggestions।</p>
+<div id="titleSuggestions"></div>
+<button class="primary" onclick="copyArray(titleSuggestionList,'Title Suggestions')">Copy All Titles</button>
+</div>
 
-    <div class="card">
-      <h2 class="section-title">🚀 SEO Title Suggestions</h2>
-      <p class="small">आपके Original Title के आधार पर पाँच अलग-अलग सुझाव। अपलोड करने से पहले Title की सच्चाई और वीडियो के कंटेंट से मिलान जरूर करें।</p>
-      <div id="titleSuggestions"></div>
-      <button class="primary" onclick="copyArray(titleSuggestionList,'Title Suggestions')">Copy All Titles</button>
-    </div>
+<div class="card">
+<h2 class="section-title">📋 Copy All SEO Suggestions</h2>
+<p class="small">Title, Suggested Tags, Hashtags और Keywords एक साथ Copy करें।</p>
+<button class="primary" onclick="copyAllSuggestions()">Copy All SEO Data</button>
+</div>
+</section>
 
-    <div class="card">
-      <h2 class="section-title">📋 Copy All SEO Suggestions</h2>
-      <p class="small">Title, Suggested Tags, Hashtags और Keywords को एक साथ Copy करें।</p>
-      <button class="primary" onclick="copyAllSuggestions()">Copy All SEO Data</button>
-    </div>
+<section id="instagramResult" class="card hidden">
+<h2 class="section-title">📸 Instagram Preview</h2>
+<div id="instagramFrame"></div>
+<button class="primary" onclick="openOriginal()">Open Original Post</button>
+</section>
 
-  </section>
-
-  <section id="instagramResult" class="card hidden">
-    <h2 class="section-title">📸 Instagram Preview</h2>
-    <div id="instagramFrame"></div>
-    <div class="action-row">
-      <button class="primary" onclick="openOriginal()">Open Original Post</button>
-    </div>
-  </section>
-
-  <section id="directResult" class="card hidden">
-    <h2 class="section-title">▶️ Direct Video Player</h2>
-    <video id="directPlayer" controls playsinline></video>
-    <div class="action-row">
-      <button class="secondary" onclick="openOriginal()">Open Video Link</button>
-    </div>
-  </section>
+<section id="directResult" class="card hidden">
+<h2 class="section-title">▶️ Direct Video Player</h2>
+<video id="directPlayer" controls playsinline></video>
+<button class="secondary" onclick="openOriginal()">Open Video Link</button>
+</section>
 </main>
 
-<footer>VideoFetch 3.0 · Smart Video SEO Tools</footer>
+<footer>VideoFetch 4.0 · Smart Video SEO Tools</footer>
 
 <script>
-const API_BASE = "https://videofetch-khy3.onrender.com";
+const API_BASE="https://videofetch-khy3.onrender.com";
 
-let currentUrl = "";
-let videoTitleText = "";
-let videoDescription = "";
-let originalTagList = [];
-let originalHashtagList = [];
-let suggestedTagList = [];
-let suggestedHashtagList = [];
-let keywordList = [];
-let titleSuggestionList = [];
-let videoData = {};
+let currentUrl="";
+let videoTitleText="";
+let videoDescription="";
+let originalTagList=[];
+let originalHashtagList=[];
+let suggestedTagList=[];
+let suggestedHashtagList=[];
+let keywordList=[];
+let titleSuggestionList=[];
+let videoData={};
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
+
+const stopWords=new Set([
+"the","and","for","with","from","this","that","these","those","you","your",
+"are","was","were","is","am","be","been","being","have","has","had","will",
+"would","could","should","can","may","might","into","about","after","before",
+"over","under","what","when","where","which","who","why","how","all","any",
+"not","but","our","out","his","her","its","their","they","them","then","than",
+"very","more","most","some","such","only","also","just","here","there",
+"full","video","videos","youtube","official","new","latest","watch","subscribe",
+"please","like","share","comment","channel","instagram","twitter","facebook",
+"com","https","http","www","copyright","fair","use","rights","reserved",
+"music","audio","hd","4k","one","two","many","much","yourself","me","of","in",
+"to","iss","hai","hain","aur","ka","ki","ke","ko","se","par","ye","is","ek",
+"mein","kya","jo","bhi","tha","the","wala","wali","ne","kaise","kyun"
+]);
 
 function toggleTheme(){
-  document.body.classList.toggle("dark");
-  localStorage.setItem("vf-theme",document.body.classList.contains("dark")?"dark":"light");
+document.body.classList.toggle("dark");
+localStorage.setItem("vf-theme",document.body.classList.contains("dark")?"dark":"light");
 }
 if(localStorage.getItem("vf-theme")==="dark")document.body.classList.add("dark");
 
 function setStatus(message,type=""){
-  $("status").textContent=message;
-  $("status").className="status "+type;
+$("status").textContent=message;
+$("status").className="status "+type;
 }
 function formatNumber(value){
-  const n=Number(value||0);
-  if(!Number.isFinite(n))return "-";
-  return new Intl.NumberFormat("en-IN",{notation:n>=100000?"compact":"standard",maximumFractionDigits:1}).format(n);
+const n=Number(value||0);
+if(!Number.isFinite(n))return "-";
+return new Intl.NumberFormat("en-IN",{notation:n>=100000?"compact":"standard",maximumFractionDigits:1}).format(n);
 }
-function formatDuration(duration){
-  if(!duration)return "-";
-  if(typeof duration==="number"){
-    const h=Math.floor(duration/3600),m=Math.floor(duration%3600/60),s=duration%60;
-    return h?`${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`:`${m}:${String(s).padStart(2,"0")}`;
-  }
-  const match=String(duration).match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  if(!match)return duration;
-  const h=Number(match[1]||0),m=Number(match[2]||0),s=Number(match[3]||0);
-  return h?`${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`:`${m}:${String(s).padStart(2,"0")}`;
+function formatDuration(value){
+if(!value)return "-";
+if(typeof value==="number"){
+const h=Math.floor(value/3600),m=Math.floor(value%3600/60),s=value%60;
+return h?`${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`:`${m}:${String(s).padStart(2,"0")}`;
+}
+const match=String(value).match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+if(!match)return value;
+const h=Number(match[1]||0),m=Number(match[2]||0),s=Number(match[3]||0);
+return h?`${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`:`${m}:${String(s).padStart(2,"0")}`;
 }
 function getYouTubeId(url){
-  try{
-    const u=new URL(url);
-    let id="";
-    if(u.hostname.includes("youtu.be"))id=u.pathname.split("/").filter(Boolean)[0]||"";
-    else if(u.hostname.includes("youtube.com")){
-      id=u.searchParams.get("v")||"";
-      if(!id){
-        const parts=u.pathname.split("/").filter(Boolean);
-        if(["shorts","embed","live"].includes(parts[0]))id=parts[1]||"";
-      }
-    }
-    return /^[a-zA-Z0-9_-]{11}$/.test(id)?id:"";
-  }catch(e){return "";}
+try{
+const u=new URL(url);let id="";
+if(u.hostname.includes("youtu.be"))id=u.pathname.split("/").filter(Boolean)[0]||"";
+else if(u.hostname.includes("youtube.com")){
+id=u.searchParams.get("v")||"";
+if(!id){
+const parts=u.pathname.split("/").filter(Boolean);
+if(["shorts","embed","live"].includes(parts[0]))id=parts[1]||"";
+}
+}
+return /^[a-zA-Z0-9_-]{11}$/.test(id)?id:"";
+}catch(e){return "";}
 }
 function cleanText(text){
-  return String(text||"")
-    .replace(/https?:\/\/\S+/gi," ")
-    .replace(/www\.\S+/gi," ")
-    .replace(/\b\S+@\S+\.\S+\b/g," ")
-    .replace(/@[a-zA-Z0-9_.]+/g," ")
-    .replace(/\s+/g," ").trim();
+return String(text||"")
+.replace(/https?:\/\/\S+/gi," ")
+.replace(/www\.\S+/gi," ")
+.replace(/\b\S+@\S+\.\S+\b/g," ")
+.replace(/@[a-zA-Z0-9_.]+/g," ")
+.replace(/[-_]{2,}/g," ")
+.replace(/\s+/g," ").trim();
 }
 function extractHashtags(text){
-  const matches=String(text||"").match(/#[\p{L}\p{N}_]+/gu)||[];
-  return [...new Set(matches.map(x=>x.replace(/[.,!?;:]+$/,"")))].slice(0,30);
+const found=String(text||"").match(/#[\p{L}\p{N}_]+/gu)||[];
+return [...new Set(found)].slice(0,30);
 }
-function normalizeWords(text){
-  return cleanText(text)
-    .replace(/#[\p{L}\p{N}_]+/gu," ")
-    .toLowerCase()
-    .match(/[\p{L}\p{N}]+/gu)||[];
+function words(text){
+return cleanText(text).replace(/#[\p{L}\p{N}_]+/gu," ")
+.toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
 }
-const stopWords=new Set([
-  "the","and","for","with","from","this","that","these","those","you","your",
-  "are","was","were","is","am","be","been","being","have","has","had","will",
-  "would","could","should","can","may","might","into","about","after","before",
-  "over","under","what","when","where","which","who","why","how","all","any",
-  "not","but","our","out","his","her","its","their","they","them","then","than",
-  "very","more","most","some","such","only","also","just","here","there","full",
-  "video","videos","youtube","official","new","latest","watch","subscribe",
-  "please","like","share","comment","channel","instagram","twitter","facebook",
-  "com","https","http","www","copyright","fair","use","rights","reserved",
-  "music","audio","hd","4k","one","two","many","much","yourself","all"
-]);
 function usefulWords(text){
-  return normalizeWords(text).filter(w=>
-    w.length>1 && !stopWords.has(w) && !/^\d+$/.test(w)
-  );
+return words(text).filter(w=>w.length>1&&!stopWords.has(w)&&!/^\d+$/.test(w));
 }
-function unique(arr){
-  return [...new Set(arr.filter(Boolean))];
+function unique(items){
+return [...new Set(items.filter(Boolean))];
 }
 function titleCase(text){
-  return text.split(" ").filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+return text.split(/\s+/).filter(Boolean).map(w=>
+w.charAt(0).toUpperCase()+w.slice(1)
+).join(" ");
 }
 function getKeywordCounts(text){
-  const words=usefulWords(text);
-  const counts={};
-  words.forEach(w=>counts[w]=(counts[w]||0)+1);
-  return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,12);
+const list=usefulWords(text),counts={};
+list.forEach(w=>counts[w]=(counts[w]||0)+1);
+return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,12);
 }
-function makePhraseTags(title,description){
-  const cleanTitle=cleanText(title);
-  const titleWords=usefulWords(cleanTitle);
-  const descWords=usefulWords(description);
-  const allCounts=getKeywordCounts(cleanTitle+" "+description);
-  const titleHashtags=extractHashtags(description).map(h=>h.slice(1));
-  const candidates=[];
+function getVideoSubject(title){
+let t=cleanText(title).replace(/[“”"]/g,"").replace(/\s+/g," ").trim();
 
-  // Title के उपयोगी शब्दों के जोड़े
-  for(let i=0;i<titleWords.length-1;i++){
-    candidates.push(titleWords[i]+" "+titleWords[i+1]);
-  }
-  // मुख्य शब्दों और संदर्भ के आधार पर phrases
-  const top=unique([...titleWords,...allCounts.map(x=>x[0])]).slice(0,8);
-  for(let i=0;i<top.length;i++){
-    for(let j=i+1;j<Math.min(i+3,top.length);j++){
-      candidates.push(top[i]+" "+top[j]);
-    }
-  }
-  // Description के hashtags को भी tags में शामिल करें
-  titleHashtags.forEach(h=>candidates.push(h.replace(/([a-z])([A-Z])/g,"$1 $2")));
-  const useful=candidates
-    .map(x=>x.trim())
-    .filter(x=>x.length>=4 && x.length<=45)
-    .filter(x=>usefulWords(x).length>=2);
-  const results=unique(useful).slice(0,15);
-  if(results.length<8){
-    allCounts.forEach(x=>{if(!results.includes(x[0]))results.push(x[0]);});
-  }
-  return results.slice(0,15).map(titleCase);
+ // "67 Mistakes In Baahubali 2 - Many Mistakes..." से मुख्य नाम निकालें
+let match=t.match(/(?:\d+\s+)?mistakes?\s+(?:in|of)\s+(.+?)(?:\s+[-–—]\s+|\s+\|\s+|$)/i);
+if(match){
+let subject=match[1].trim();
+subject=subject.replace(/\b(full|hindi|movie|many|mistakes)\b/gi," ").replace(/\s+/g," ").trim();
+if(subject)return titleCase(subject);
 }
-function makeHashtags(title,description,tags){
-  const existing=extractHashtags(description);
-  const words=usefulWords(title);
-  const titlePhrases=[];
-  for(let i=0;i<words.length-1;i++){
-    titlePhrases.push(words[i]+words[i+1]);
-  }
-  const tagHashtags=tags.map(t=>"#"+t.split(/\s+/).map(x=>x.replace(/[^\p{L}\p{N}]/gu,"")).join(""));
-  const derived=titlePhrases.map(x=>"#"+x);
-  const combined=unique([...existing,...tagHashtags,...derived])
-    .filter(h=>/^#[\p{L}\p{N}_]{3,30}$/u.test(h))
-    .filter(h=>!stopWords.has(h.slice(1).toLowerCase()))
-    .slice(0,12);
-  return combined;
+
+ // Quoted movie name को fallback के रूप में लें
+match=String(title).match(/["“]([^"”]+)["”]/);
+if(match){
+let subject=match[1].split(/\s[-–—]\s/)[0].trim();
+subject=subject.replace(/\b(full|hindi|movie)\b/gi," ").trim();
+if(subject)return titleCase(subject);
+}
+
+ // आखिरी विकल्प: शुरुआती शब्दों से विषय तैयार करें
+let clean=t.replace(/^\d+\s+/,"").replace(/\b(mistakes?|many|full|hindi|movie|explained)\b/gi," ");
+clean=clean.replace(/\s+/g," ").trim();
+return titleCase(clean.split(" ").slice(0,5).join(" "))||"Video";
+}
+function getLeadingNumber(title){
+const m=String(title).match(/\b\d+\b/);
+return m?m[0]:"";
+}
+function makeSuggestedTags(title,description){
+const subject=getVideoSubject(title);
+const number=getLeadingNumber(title);
+const existing=extractHashtags(description).map(h=>h.slice(1));
+const candidates=[
+subject,
+subject+" Mistakes",
+subject+" Movie",
+subject+" Movie Mistakes",
+"Movie Mistakes",
+"Hindi Movie Mistakes",
+"Movie Mistakes Hindi"
+];
+if(number){
+candidates.push(number+" Mistakes");
+candidates.push(number+" Movie Mistakes");
+candidates.push(number+" Mistakes "+subject);
+}
+existing.forEach(h=>candidates.push(h.replace(/([a-z])([A-Z])/g,"$1 $2")));
+const result=unique(candidates.map(x=>titleCase(x.trim())))
+.filter(x=>x.length>=3&&x.length<=55)
+.filter(x=>usefulWords(x).length>=1);
+return result.slice(0,15);
+}
+function makeSuggestedHashtags(title,description,tags){
+const existing=extractHashtags(description);
+const subject=getVideoSubject(title);
+const compactSubject=subject.replace(/[^a-zA-Z0-9]/g,"");
+const derived=[
+"#"+compactSubject,
+"#"+compactSubject+"Mistakes",
+"#MovieMistakes"
+];
+const tagHashes=tags.map(t=>"#"+t.replace(/[^a-zA-Z0-9]/g,""));
+return unique([...existing,...derived,...tagHashes])
+.filter(h=>/^#[a-zA-Z0-9_]{3,35}$/.test(h))
+.slice(0,10);
 }
 function makeTitleSuggestions(title){
-  const clean=cleanText(title).replace(/[|–—-]+/g," ").replace(/\s+/g," ").trim();
-  const words=clean.split(" ").filter(Boolean);
-  const numMatch=clean.match(/\b\d+\b/);
-  const number=numMatch?numMatch[0]:"";
-  let subject=clean;
-  if(number)subject=subject.replace(number,"").trim();
-  subject=subject.replace(/\b(many|mistakes|full|hindi|movie|explained|explanation)\b/gi," ").replace(/\s+/g," ").trim();
-  if(subject.length>55)subject=subject.split(" ").slice(0,7).join(" ");
-  if(!subject)subject=clean.slice(0,55);
-  const n=number||"";
-  let suggestions=[
-    `${n?n+" ":""}Mistakes in ${subject} Explained`,
-    `${subject}: ${n?n+" ":""}Movie Mistakes`,
-    `${n?n+" ":""}Mistakes in ${subject} | Hindi`,
-    `${subject} Movie Mistakes You May Have Missed`,
-    `Mistakes in ${subject} - Complete Breakdown`
-  ];
-  suggestions=suggestions.map(s=>s.replace(/\s+/g," ").trim());
-  if(!number){
-    suggestions=[
-      `${subject} Explained | Important Details`,
-      `${subject}: Full Breakdown`,
-      `Things You May Have Missed in ${subject}`,
-      `${subject} - Complete Explanation`,
-      `${subject} | Detailed Analysis`
-    ];
-  }
-  return unique(suggestions).slice(0,5);
+const subject=getVideoSubject(title);
+const number=getLeadingNumber(title);
+if(number){
+return unique([
+`${number} Mistakes in ${subject} Explained`,
+`${subject}: ${number} Movie Mistakes`,
+`${number} Mistakes in ${subject} | Hindi`,
+`${subject} Movie Mistakes You May Have Missed`,
+`${subject} – The Conclusion: ${number} Mistakes`
+]).slice(0,5);
+}
+return unique([
+`${subject} Explained`,
+`${subject}: Complete Analysis`,
+`Important Details About ${subject}`,
+`${subject} - Full Breakdown`,
+`Things You May Have Missed in ${subject}`
+]).slice(0,5);
 }
 function renderChips(id,items){
-  const el=$(id);el.innerHTML="";
-  if(!items.length){el.innerHTML='<span class="small">कोई डेटा उपलब्ध नहीं है।</span>';return;}
-  items.forEach(item=>{
-    const span=document.createElement("span");
-    span.className="chip";span.textContent=item;el.appendChild(span);
-  });
+const el=$(id);el.innerHTML="";
+if(!items.length){
+el.innerHTML='<span class="small">कोई डेटा उपलब्ध नहीं है।</span>';return;
+}
+items.forEach(item=>{
+const span=document.createElement("span");
+span.className="chip";span.textContent=item;el.appendChild(span);
+});
 }
 async function copyValue(value,label){
-  if(!value){setStatus(label+" उपलब्ध नहीं है।","error");return;}
-  try{
-    await navigator.clipboard.writeText(String(value));
-    setStatus(label+" सफलतापूर्वक कॉपी हो गया!","success");
-  }catch(e){
-    fallbackCopy(String(value),label);
-  }
+if(!value){setStatus(label+" उपलब्ध नहीं है।","error");return;}
+try{
+await navigator.clipboard.writeText(String(value));
+setStatus(label+" सफलतापूर्वक कॉपी हो गया!","success");
+}catch(e){fallbackCopy(String(value),label);}
 }
 function fallbackCopy(value,label){
-  const area=document.createElement("textarea");
-  area.value=value;document.body.appendChild(area);area.select();
-  try{document.execCommand("copy");setStatus(label+" सफलतापूर्वक कॉपी हो गया!","success");}
-  catch(e){setStatus("कॉपी नहीं हो पाया। टेक्स्ट को मैन्युअली कॉपी करें।","error");}
-  area.remove();
+const area=document.createElement("textarea");
+area.value=value;document.body.appendChild(area);area.select();
+try{
+document.execCommand("copy");
+setStatus(label+" सफलतापूर्वक कॉपी हो गया!","success");
+}catch(e){setStatus("कॉपी नहीं हो पाया।","error");}
+area.remove();
 }
 function copyArray(arr,label,comma=false){
-  if(!arr||!arr.length){setStatus(label+" उपलब्ध नहीं हैं।","error");return;}
-  copyValue(arr.join(comma?", ":"\n"),label);
+if(!arr||!arr.length){setStatus(label+" उपलब्ध नहीं हैं।","error");return;}
+copyValue(arr.join(comma?", ":"\n"),label);
 }
 function copyAllSuggestions(){
-  const text=[
-    "TITLE SUGGESTIONS",...titleSuggestionList,
-    "\nSUGGESTED TAGS",suggestedTagList.join(", "),
-    "\nSUGGESTED HASHTAGS",suggestedHashtagList.join(" "),
-    "\nKEYWORDS",keywordList.join(", ")
-  ].join("\n");
-  copyValue(text,"All SEO Data");
+const text=[
+"TITLE SUGGESTIONS",...titleSuggestionList,
+"\nSUGGESTED TAGS",suggestedTagList.join(", "),
+"\nSUGGESTED HASHTAGS",suggestedHashtagList.join(" "),
+"\nKEYWORDS",keywordList.join(", ")
+].join("\n");
+copyValue(text,"All SEO Data");
 }
 function openOriginal(){
-  if(currentUrl)window.open(currentUrl,"_blank","noopener");
+if(currentUrl)window.open(currentUrl,"_blank","noopener");
 }
 function hideAllResults(){
-  $("results").classList.add("hidden");
-  $("instagramResult").classList.add("hidden");
-  $("directResult").classList.add("hidden");
+$("results").classList.add("hidden");
+$("instagramResult").classList.add("hidden");
+$("directResult").classList.add("hidden");
 }
 async function analyzeVideo(){
-  const url=$("videoUrl").value.trim();
-  if(!url){setStatus("कृपया पहले वीडियो का लिंक डालें।","error");return;}
-  try{new URL(url);}catch(e){setStatus("कृपया सही URL डालें।","error");return;}
-  currentUrl=url;
-  $("analyzeBtn").disabled=true;
-  $("analyzeBtn").textContent="Analyzing...";
-  hideAllResults();
-  setStatus("वीडियो की जानकारी प्राप्त की जा रही है...");
-  try{
-    const ytId=getYouTubeId(url);
-    if(ytId){
-      await analyzeYouTube(url);
-    }else if(/instagram\.com/i.test(url)){
-      showInstagram(url);
-    }else if(/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)){
-      showDirect(url);
-    }else{
-      const response=await fetch(API_BASE+"/api/video?url="+encodeURIComponent(url));
-      const data=await response.json();
-      if(!response.ok)throw new Error(data.error||"वीडियो की जानकारी नहीं मिल सकी।");
-      if(data.thumbnail||data.title){
-        displayBasicVideo(data,url);
-      }else{
-        throw new Error("इस URL का Preview उपलब्ध नहीं है।");
-      }
-    }
-  }catch(error){
-    setStatus(error.message||"कुछ गलत हो गया। कृपया दोबारा कोशिश करें।","error");
-  }finally{
-    $("analyzeBtn").disabled=false;
-    $("analyzeBtn").textContent="Analyze Video";
-  }
+const url=$("videoUrl").value.trim();
+if(!url){setStatus("कृपया पहले वीडियो का लिंक डालें।","error");return;}
+try{new URL(url);}catch(e){setStatus("कृपया सही URL डालें।","error");return;}
+currentUrl=url;
+$("analyzeBtn").disabled=true;
+$("analyzeBtn").textContent="Analyzing...";
+hideAllResults();
+setStatus("वीडियो की जानकारी प्राप्त की जा रही है...");
+try{
+const id=getYouTubeId(url);
+if(id)await analyzeYouTube(url);
+else if(/instagram\.com/i.test(url))showInstagram(url);
+else if(/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url))showDirect(url);
+else{
+const r=await fetch(API_BASE+"/api/video?url="+encodeURIComponent(url));
+const d=await r.json();
+if(!r.ok)throw new Error(d.error||"वीडियो की जानकारी नहीं मिली।");
+if(d.thumbnail||d.title)displayBasicVideo(d);
+else throw new Error("इस URL का Preview उपलब्ध नहीं है।");
+}
+}catch(e){setStatus(e.message||"कुछ गलत हो गया।","error");}
+finally{
+$("analyzeBtn").disabled=false;
+$("analyzeBtn").textContent="Analyze Video";
+}
 }
 async function analyzeYouTube(url){
-  const response=await fetch(API_BASE+"/api/youtube-details?url="+encodeURIComponent(url));
-  const data=await response.json();
-  if(!response.ok)throw new Error(data.error||"YouTube Details प्राप्त नहीं हो सके।");
-  const video=data.video||data;
-  videoData=video;
-  displayVideo(video);
-  runSEOAnalysis(video);
-  $("results").classList.remove("hidden");
-  setStatus("वीडियो का SEO Analysis पूरा हो गया!","success");
+const r=await fetch(API_BASE+"/api/youtube-details?url="+encodeURIComponent(url));
+const data=await r.json();
+if(!r.ok)throw new Error(data.error||"YouTube Details प्राप्त नहीं हुए।");
+const video=data.video||data;
+videoData=video;
+displayVideo(video);
+runSEOAnalysis(video);
+$("results").classList.remove("hidden");
+setStatus("वीडियो का SEO Analysis पूरा हो गया!","success");
 }
-function displayBasicVideo(data,url){
-  $("results").classList.remove("hidden");
-  $("thumbnail").src=data.thumbnail||"";
-  $("videoTitle").textContent=data.title||"Video";
-  $("channelName").textContent=data.channelTitle||"";
-  $("views").textContent="-";$("likes").textContent="-";$("comments").textContent="-";
-  $("videoMeta").textContent="इस URL के लिए सीमित जानकारी उपलब्ध है।";
-  $("scoreValue").textContent="—";
-  $("scoreBreakdown").innerHTML="<p class='small'>पूरा SEO Analysis केवल समर्थित YouTube वीडियो के लिए उपलब्ध है।</p>";
-  setStatus("वीडियो का बेसिक Preview तैयार है।");
+function displayBasicVideo(data){
+$("results").classList.remove("hidden");
+$("thumbnail").src=data.thumbnail||"";
+$("videoTitle").textContent=data.title||"Video";
+$("channelName").textContent=data.channelTitle||"";
+$("views").textContent="-";$("likes").textContent="-";$("comments").textContent="-";
+$("videoMeta").textContent="इस URL के लिए सीमित जानकारी उपलब्ध है।";
+$("scoreValue").textContent="—";
+$("scoreBreakdown").innerHTML="<p class='small'>पूरा SEO Analysis केवल समर्थित YouTube वीडियो के लिए उपलब्ध है।</p>";
+setStatus("वीडियो का बेसिक Preview तैयार है।");
 }
 function displayVideo(video){
-  videoTitleText=video.title||"";
-  videoDescription=video.description||"";
-  $("thumbnail").src=video.thumbnail||"";
-  $("videoTitle").textContent=videoTitleText||"Title उपलब्ध नहीं";
-  $("channelName").textContent=video.channelTitle||video.channel||"";
-  $("views").textContent=formatNumber(video.viewCount);
-  $("likes").textContent=formatNumber(video.likeCount);
-  $("comments").textContent=formatNumber(video.commentCount);
-  $("videoMeta").textContent=
-    "Published: "+(video.publishedAt?new Date(video.publishedAt).toLocaleDateString("en-IN"):"-")+
-    " · Duration: "+formatDuration(video.duration);
+videoTitleText=video.title||"";
+videoDescription=video.description||"";
+$("thumbnail").src=video.thumbnail||"";
+$("videoTitle").textContent=videoTitleText||"Title उपलब्ध नहीं";
+$("channelName").textContent=video.channelTitle||video.channel||"";
+$("views").textContent=formatNumber(video.viewCount);
+$("likes").textContent=formatNumber(video.likeCount);
+$("comments").textContent=formatNumber(video.commentCount);
+$("videoMeta").textContent="Published: "+
+(video.publishedAt?new Date(video.publishedAt).toLocaleDateString("en-IN"):"-")+
+" · Duration: "+formatDuration(video.duration);
 }
 function runSEOAnalysis(video){
-  const title=video.title||"";
-  const description=video.description||"";
-  originalTagList=Array.isArray(video.tags)?video.tags.filter(Boolean):[];
-  originalHashtagList=extractHashtags(description);
-  const titleWords=usefulWords(title);
-  const descriptionWords=usefulWords(description);
-  const descLength=description.trim().length;
-  const titleScore=Math.min(40,Math.round(Math.min(title.length,60)/60*40));
-  const descScore=Math.min(30,Math.round(Math.min(descLength,500)/500*30));
-  const tagScore=originalTagList.length?Math.min(15,Math.round(originalTagList.length/15*15)):null;
-  const hashtagScore=originalHashtagList.length?5:0;
-  const views=Number(video.viewCount||0),likes=Number(video.likeCount||0);
-  const engagement=views?likes/views*100:0;
-  const engagementScore=views?Math.min(10,Math.round(engagement/5*10)):null;
+const title=video.title||"";
+const description=video.description||"";
+originalTagList=Array.isArray(video.tags)?video.tags.filter(Boolean):[];
+originalHashtagList=extractHashtags(description);
 
-  const components=[
-    {name:"Title Optimization",score:titleScore,max:40},
-    {name:"Description",score:descScore,max:30},
-    ...(tagScore===null?[]:[{name:"Original Tags",score:tagScore,max:15}]),
-    {name:"Hashtags",score:hashtagScore,max:5},
-    ...(engagementScore===null?[]:[{name:"Engagement",score:engagementScore,max:10}])
-  ];
-  const total=components.reduce((s,x)=>s+x.score,0);
-  const possible=components.reduce((s,x)=>s+x.max,0);
-  const finalScore=possible?Math.round(total/possible*100):0;
-  $("scoreValue").textContent=finalScore;
-  $("scoreCircle").style.setProperty("--score",finalScore+"%");
-  $("scoreBreakdown").innerHTML=components.map(c=>`
-    <div class="progress-row">
-      <div class="progress-label"><span>${c.name}</span><strong>${c.score}/${c.max}</strong></div>
-      <div class="progress"><div style="width:${c.score/c.max*100}%"></div></div>
-    </div>`).join("")+
-    (tagScore===null?'<p class="small">Original Tags API से उपलब्ध नहीं थे, इसलिए उन्हें Score में शामिल नहीं किया गया।</p>':"");
+const titleScore=Math.min(40,Math.round(Math.min(title.length,60)/60*40));
+const descScore=Math.min(30,Math.round(Math.min(description.length,500)/500*30));
+const tagScore=originalTagList.length?Math.min(15,originalTagList.length):null;
+const hashtagScore=originalHashtagList.length?5:0;
+const views=Number(video.viewCount||0);
+const likes=Number(video.likeCount||0);
+const engagement=views?likes/views*100:0;
+const engagementScore=views?Math.min(10,Math.round(engagement/5*10)):null;
 
-  $("descriptionStats").textContent=
-    "Characters: "+descLength+" · Words: "+normalizeWords(description).length+
-    " · Hashtags: "+originalHashtagList.length;
-  $("descriptionText").textContent=description||"Description उपलब्ध नहीं है।";
+const parts=[
+{name:"Title Optimization",score:titleScore,max:40},
+{name:"Description",score:descScore,max:30},
+...(tagScore===null?[]:[{name:"Original Tags",score:tagScore,max:15}]),
+{name:"Hashtags",score:hashtagScore,max:5},
+...(engagementScore===null?[]:[{name:"Engagement",score:engagementScore,max:10}])
+];
+const total=parts.reduce((s,x)=>s+x.score,0);
+const possible=parts.reduce((s,x)=>s+x.max,0);
+const score=possible?Math.round(total/possible*100):0;
+$("scoreValue").textContent=score;
+$("scoreCircle").style.setProperty("--score",score+"%");
+$("scoreBreakdown").innerHTML=parts.map(p=>`
+<div class="progress-row">
+<div class="progress-label"><span>${p.name}</span><strong>${p.score}/${p.max}</strong></div>
+<div class="progress"><div style="width:${p.score/p.max*100}%"></div></div>
+</div>`).join("")+
+(tagScore===null?'<p class="small">Original Tags API से उपलब्ध नहीं थे, इसलिए उन्हें Score में शामिल नहीं किया गया।</p>':"");
 
-  renderChips("originalHashtags",originalHashtagList);
-  renderChips("originalTags",originalTagList);
-  $("originalTagsNote").textContent=originalTagList.length?
-    originalTagList.length+" Original Tags मिले।":
-    "Original Tags उपलब्ध नहीं हैं। YouTube API ने इस वीडियो के Tags नहीं दिए।";
+$("descriptionStats").textContent="Characters: "+description.length+
+" · Words: "+words(description).length+" · Hashtags: "+originalHashtagList.length;
+$("descriptionText").textContent=description||"Description उपलब्ध नहीं है।";
 
-  suggestedTagList=makePhraseTags(title,description);
-  suggestedHashtagList=makeHashtags(title,description,suggestedTagList);
-  renderChips("suggestedTags",suggestedTagList);
-  renderChips("suggestedHashtags",suggestedHashtagList);
+renderChips("originalHashtags",originalHashtagList);
+renderChips("originalTags",originalTagList);
+$("originalTagsNote").textContent=originalTagList.length?
+originalTagList.length+" Original Tags मिले।":
+"Original Tags उपलब्ध नहीं हैं। YouTube API ने इस वीडियो के Tags नहीं दिए।";
 
-  const keywords=getKeywordCounts(title+" "+description);
-  keywordList=keywords.map(x=>x[0]);
-  $("keywordList").innerHTML=keywords.length?keywords.map(([word,count])=>`
-    <div class="keyword-item"><span>${escapeHTML(word)}</span><strong>${count}</strong></div>
-  `).join(""):'<span class="small">उपयोगी Keywords नहीं मिले।</span>';
+suggestedTagList=makeSuggestedTags(title,description);
+suggestedHashtagList=makeSuggestedHashtags(title,description,suggestedTagList);
+renderChips("suggestedTags",suggestedTagList);
+renderChips("suggestedHashtags",suggestedHashtagList);
 
-  const commentCount=Number(video.commentCount||0);
-  $("engagementStats").innerHTML=`
-    <p><strong>Like Rate:</strong> ${views?(likes/views*100).toFixed(2)+"%":"N/A"}</p>
-    <p><strong>Comments:</strong> ${formatNumber(commentCount)}</p>
-    <p><strong>Views:</strong> ${formatNumber(views)}</p>
-    <p><strong>Likes:</strong> ${formatNumber(likes)}</p>
-    <p class="small">Engagement का यह हिसाब उपलब्ध Views और Likes पर आधारित है।</p>
-  `;
+const counts=getKeywordCounts(title+" "+description);
+keywordList=counts.map(x=>x[0]);
+$("keywordList").innerHTML=counts.length?counts.map(([word,count])=>`
+<div class="keyword-item"><span>${escapeHTML(word)}</span><strong>${count}</strong></div>
+`).join(""):'<span class="small">उपयोगी Keywords नहीं मिले।</span>';
 
-  titleSuggestionList=makeTitleSuggestions(title);
-  $("titleSuggestions").innerHTML="";
-  titleSuggestionList.forEach((t,i)=>{
-    const div=document.createElement("div");div.className="title-item";
-    const p=document.createElement("p");p.textContent=(i+1)+". "+t;
-    const btn=document.createElement("button");btn.className="secondary";btn.textContent="Copy";
-    btn.onclick=()=>copyValue(t,"Title");
-    div.append(p,btn);$("titleSuggestions").appendChild(div);
-  });
+$("engagementStats").innerHTML=`
+<p><strong>Like Rate:</strong> ${views?(likes/views*100).toFixed(2)+"%":"N/A"}</p>
+<p><strong>Comments:</strong> ${formatNumber(video.commentCount)}</p>
+<p><strong>Views:</strong> ${formatNumber(views)}</p>
+<p><strong>Likes:</strong> ${formatNumber(likes)}</p>
+<p class="small">यह हिसाब उपलब्ध Views और Likes पर आधारित है।</p>`;
+
+titleSuggestionList=makeTitleSuggestions(title);
+$("titleSuggestions").innerHTML="";
+titleSuggestionList.forEach((t,i)=>{
+const div=document.createElement("div");div.className="title-item";
+const p=document.createElement("p");p.textContent=(i+1)+". "+t;
+const btn=document.createElement("button");btn.className="secondary";
+btn.textContent="Copy";btn.onclick=()=>copyValue(t,"Title");
+div.append(p,btn);$("titleSuggestions").appendChild(div);
+});
 }
 function escapeHTML(text){
-  return String(text).replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+return String(text).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 }
 function showInstagram(url){
-  $("instagramResult").classList.remove("hidden");
-  $("instagramFrame").innerHTML="";
-  const iframe=document.createElement("iframe");
-  iframe.src=url.replace(/\/?$/,"/")+"embed";
-  iframe.setAttribute("allowtransparency","true");
-  $("instagramFrame").appendChild(iframe);
-  setStatus("Instagram Preview तैयार है। यदि Embed न खुले तो Open Original Post दबाएँ।","success");
+$("instagramResult").classList.remove("hidden");
+$("instagramFrame").innerHTML="";
+const iframe=document.createElement("iframe");
+iframe.src=url.replace(/\/?$/,"/")+"embed";
+$("instagramFrame").appendChild(iframe);
+setStatus("Instagram Preview तैयार है। यदि Embed न खुले तो Open Original Post दबाएँ।","success");
 }
 function showDirect(url){
-  $("directResult").classList.remove("hidden");
-  $("directPlayer").src=url;
-  setStatus("Direct Video Player तैयार है।","success");
+$("directResult").classList.remove("hidden");
+$("directPlayer").src=url;
+setStatus("Direct Video Player तैयार है।","success");
 }
 </script>
 </body>
